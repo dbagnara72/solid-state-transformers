@@ -1,0 +1,141 @@
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+
+# debug information files
+*.dwo
+
+# clion (demerzel)
+*.idea
+
+# enviroment
+.venv
+.vscode
+
+# MATLAB and Simulink
+Simulink/**/slprj
+*.asv
+*.mltbx
+*.mexa64
+*.mexmaci64
+*.mexw32
+*.mexw64
+*.p
+*.mat
+*.mex
+*.bak
+*.mexmaci64
+*.mexa64
+*.mexw32
+*.mexw64
+*.mexglx
+*.mexe
+*.mexmac
+*.mexmaci
+*.mexmaci64
+*.mexw32
+*.mexw64
+*.mbd
+*.tlf
+*.prj
+*.xsg
+*.slprj
+*.sldd
+*.slddc
+*.slddrw
+*.sldrt
+*.sltx
+*.ssm
+*.nbp
+*.pbl
+*.opv
+*.autosave
+*.rtw
+*.rtm
+*.rpt
+*.slprj.bak
+*.slx.autosave
+*.mltbx.bak
+*.lm
+*.fl
+*.fda
+*.make
+*.grh
+*.nlo
+*.r20
+*.sltp
+*.sn1
+*.trace
+*.mldatx
+*.mdlp
+*.mldatx
+*.mltbxproj
+*.mexmac
+*.rtwlog
+*.rti
+*.log
+*.pcw
+*.ghw
+
+# Temporary files
+*.bak
+*.swp
+*~
+
+# Ignore user-specific MATLAB configuration files
+*.matlab
+
+# Ignore Simulink cache files
+*.slxcache
+
+# Ignore Simulink code generation folders
+codegen/

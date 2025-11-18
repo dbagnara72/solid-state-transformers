@@ -1,0 +1,62 @@
+component singlephase_inductor_with_saturation
+% singlephase inductor with saturation
+%
+% Model description:
+%
+% To disable saturation effect set i-base to inf.
+
+    nodes
+        up = foundation.electrical.electrical;      % up:left
+        un = foundation.electrical.electrical;      % un:right
+    end
+
+    outputs
+        psi_out = {0, 'V*s'};    % psi
+    end
+
+    parameters
+        L = {300e-6, 'H'};       % linkage inductance
+        Ld = {20e-6, 'H'};       % leankage inductance
+        R = {2.4e-3, 'Ohm'};     % winding resistance
+        i_base = {360, 'A'};     % Base Current (Arms) : i_base
+    end
+
+    variables
+        u = { 0, 'V' };              % u 
+        i = { 0, 'A' };              % i 
+        i_norm = { 0, '1' };         % i_norm  
+
+        psi = {value = {0, 'V*s'}, priority = priority.high };              % psi     
+        kL_saturation = {value = {1, '1'}, priority = priority.high };    % kL_saturation  
+        L_actual = { 0, 'H' };                                              % L_actual 
+ 
+    end
+
+    parameters(Access=private) 
+        L_saturation = {[1.0, 1.0, 1.0, 0.88, 0.39], '1'};
+        Normalized_current = {[0, 1.0, 1.35, 2.30, 3.85], '1'};
+    end
+
+
+    branches
+        i : up.i -> un.i;
+    end
+
+    equations
+        let
+
+        in
+            i_norm == abs(i/i_base/sqrt(2));
+            kL_saturation == tablelookup(Normalized_current, L_saturation, i_norm,...
+                interpolation = linear, extrapolation = nearest);
+            L_actual == L*kL_saturation; 
+            
+            u == up.v - un.v;
+            
+            u - R*i -psi.der == 0;
+            u - R*i - (Ld+L_actual)*i.der == 0;
+            
+            psi_out == psi;
+        end
+    end
+end
