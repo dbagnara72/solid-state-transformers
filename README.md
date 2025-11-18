@@ -1,7 +1,16 @@
 # Solid state transformers
 
 This repo contains a collection of simscape models concerning SST. 
-**Remark** - add library to the path of matlab.
+
+**How to use the repo**:
+- In matlab add to the path/with-subfolders the repo "library". This repo contains all fundamentals simscape (ssc) models compiled with "ssc_bultd".
+- The folder ./library/user_defined_functions/ccaller contains a list of c-coded functions used inside the simulink models by ccallers.
+- The folder ./library/foundation contains all simscape language based model used in the simulink models.
+
+ # Documentation
+Documentation is available into the **library** repository.
+
+ # Description of the repo
 
 As known SST are build by a cascade of single-phase-inverter, where each one is galvanically insulated by DABs, LLCs and similar high efficient DC/DC converters.
 
