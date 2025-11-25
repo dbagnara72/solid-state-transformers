@@ -2,7 +2,7 @@ clear all
 close all
 clc
 
-load sim_result_1.mat;
+load sim_result_3.mat;
 idc_grid = mean(current_battery_sim);
 udc_grid = mean(voltage_battery_sim);
 p_dc_grid = idc_grid*udc_grid

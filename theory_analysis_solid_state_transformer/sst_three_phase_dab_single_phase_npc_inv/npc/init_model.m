@@ -370,75 +370,30 @@ grid on %[output:28c3084b]
 %[text] #### HeatSink settings
 heatsink_liquid_2kW; %[output:2330891c] %[output:55c0aace] %[output:6d4591c7]
 %[text] #### DEVICES settings
-danfoss_SKM1700MB20R4S2I4;
+danfoss_SKM1700MB20R4S2I4; % SiC-Mosfet full leg
+dab_mosfet.Vth = Vth;                                  % [V]
+dab_mosfet.Rds_on = Rds_on;                            % [Ohm]
+dab_mosfet.Vdon_diode = Vdon_diode;                    % [V]
+dab_mosfet.Vgamma = Vgamma;                            % [V]
+dab_mosfet.Rdon_diode = Rdon_diode;                    % [Ohm]
+dab_mosfet.Eon = Eon;                                  % [J] @ Tj = 125°C
+dab_mosfet.Eoff = Eoff;                                % [J] @ Tj = 125°C
+dab_mosfet.Eerr = Eerr;                                % [J] @ Tj = 125°C
+dab_mosfet.Voff_sw_losses = Voff_sw_losses;            % [V]
+dab_mosfet.Ion_sw_losses = Ion_sw_losses;              % [A]
+dab_mosfet.JunctionTermalMass = JunctionTermalMass;    % [J/K]
+dab_mosfet.Rtim = Rtim;                                % [K/W]
+dab_mosfet.Rth_mosfet_JC = Rth_mosfet_JC;              % [K/W]
+dab_mosfet.Rth_mosfet_CH = Rth_mosfet_CH;              % [K/W]
+dab_mosfet.Rth_mosfet_JH = Rth_mosfet_JH;              % [K/W]
+dab_mosfet.Lstray_module = Lstray_module;              % [H]
+dab_mosfet.Irr = Irr;                                  % [A]
+dab_mosfet.Csnubber = Csnubber;                        % [F]
+dab_mosfet.Rsnubber = Rsnubber;                        % [Ohm]
+dab_mosfet.Csnubber_zvs = 4.5e-9;                      % [F]
+dab_mosfet.Rsnubber_zvs = 5e-3;                        % [Ohm]
 
-dab.Vth = Vth;                                  % [V]
-dab.Rds_on = Rds_on;                            % [Ohm]
-dab.Vdon_diode = Vdon_diode;                    % [V]
-dab.Vgamma = Vgamma;                            % [V]
-dab.Rdon_diode = Rdon_diode;                    % [Ohm]
-dab.Eon = Eon;                                  % [J] @ Tj = 125°C
-dab.Eoff = Eoff;                                % [J] @ Tj = 125°C
-dab.Eerr = Eerr;                                % [J] @ Tj = 125°C
-dab.Voff_sw_losses = Voff_sw_losses;            % [V]
-dab.Ion_sw_losses = Ion_sw_losses;              % [A]
-dab.JunctionTermalMass = JunctionTermalMass;    % [J/K]
-dab.Rtim = Rtim;                                % [K/W]
-dab.Rth_mosfet_JC = Rth_mosfet_JC;              % [K/W]
-dab.Rth_mosfet_CH = Rth_mosfet_CH;              % [K/W]
-dab.Rth_mosfet_JH = Rth_mosfet_JH;              % [K/W]
-dab.Lstray_module = Lstray_module;              % [H]
-dab.Irr = Irr;                                  % [A]
-dab.Csnubber = Csnubber;                        % [F]
-dab.Rsnubber = Rsnubber;                        % [Ohm]
-% dab.Csnubber = Irr^2*Lstray_module/Vdab2_dc_nom^2
-% dab.Rsnubber = 1/(Csnubber*fPWM_DAB)/5
-
-% infineon_FF1000UXTR23T2M1;
-% inv.Vth = Vth;                                  % [V]
-% inv.Rds_on = Rds_on;                            % [Ohm]
-% inv.Vdon_diode = Vdon_diode;                    % [V]
-% inv.Vgamma = Vgamma;                            % [V]
-% inv.Rdon_diode = Rdon_diode;                    % [Ohm]
-% inv.Eon = Eon;                                  % [J] @ Tj = 125°C
-% inv.Eoff = Eoff;                                % [J] @ Tj = 125°C
-% inv.Eerr = Eerr;                                % [J] @ Tj = 125°C
-% inv.Voff_sw_losses = Voff_sw_losses;            % [V]
-% inv.Ion_sw_losses = Ion_sw_losses;              % [A]
-% inv.JunctionTermalMass = JunctionTermalMass;    % [J/K]
-% inv.Rtim = Rtim;                                % [K/W]
-% inv.Rth_mosfet_JC = Rth_mosfet_JC;              % [K/W]
-% inv.Rth_mosfet_CH = Rth_mosfet_CH;              % [K/W]
-% inv.Rth_mosfet_JH = Rth_mosfet_JH;              % [K/W]
-% inv.Lstray_module = Lstray_module;              % [H]
-% inv.Irr = Irr;                                  % [A]
-% inv.Csnubber = Csnubber;                        % [F]
-% inv.Rsnubber = Rsnubber;                        % [Ohm]
-
-infineon_FF2400RB12IP7;
-inv_t.Vth = Vth;                                  % [V]
-inv_t.Vce_sat = Vce_sat;                          % [V]
-inv_t.Rce_on = Rce_on;                            % [Ohm]
-inv_t.Vdon_diode = Vdon_diode;                    % [V]
-inv_t.Rdon_diode = Rdon_diode;                    % [Ohm]
-inv_t.Eon = Eon;                                  % [J] @ Tj = 125°C
-inv_t.Eoff = Eoff;                                % [J] @ Tj = 125°C
-inv_t.Erec = Erec;                                % [J] @ Tj = 125°C
-inv_t.Voff_sw_losses = Voff_sw_losses;            % [V]
-inv_t.Ion_sw_losses = Ion_sw_losses;              % [A]
-inv_t.JunctionTermalMass = JunctionTermalMass;    % [J/K]
-inv_t.Rtim = Rtim;                                % [K/W]
-inv_t.Rth_switch_JC = Rth_switch_JC;              % [K/W]
-inv_t.Rth_switch_CH = Rth_switch_CH;              % [K/W]
-inv_t.Rth_switch_JH = Rth_switch_JH;              % [K/W]
-inv_t.Lstray_module = Lstray_module;              % [H]
-inv_t.Irr = Irr;                                  % [A]
-inv_t.Csnubber = Csnubber;                        % [F]
-inv_t.Rsnubber = Rsnubber;                        % [Ohm]
-% inv_t.Csnubber = Irr^2*Lstray_module/Vdc_bez^2
-% inv_t.Rsnubber = 1/(Csnubber*fPWM_INV)/5
-
-infineon_FF1800R12IE5;
+danfoss_SKM1400MLI12BM7; % 3L-NPC Si-IGBT
 inv.Vth = Vth;                                  % [V]
 inv.Vce_sat = Vce_sat;                          % [V]
 inv.Rce_on = Rce_on;                            % [Ohm]
@@ -458,8 +413,31 @@ inv.Lstray_module = Lstray_module;              % [H]
 inv.Irr = Irr;                                  % [A]
 inv.Csnubber = Csnubber;                        % [F]
 inv.Rsnubber = Rsnubber;                        % [Ohm]
-% inv.Csnubber = Irr^2*Lstray_module/Vdc_bez^2
-% inv.Rsnubber = 1/(Csnubber*fPWM_INV)/5
+inv.Csnubber_zvs = 4.5e-9;                      % [F]
+inv.Rsnubber_zvs = 5e-3;                        % [Ohm]
+
+wolfspeed_CAB760M12HM3; % SiC Mosfet fpr 3L - NPC
+inv_mosfet.Vth = Vth;                                  % [V]
+inv_mosfet.Rds_on = Rds_on;                            % [Ohm]
+inv_mosfet.Vdon_diode = Vdon_diode;                    % [V]
+inv_mosfet.Vgamma = Vgamma;                            % [V]
+inv_mosfet.Rdon_diode = Rdon_diode;                    % [Ohm]
+inv_mosfet.Eon = Eon;                                  % [J] @ Tj = 125°C
+inv_mosfet.Eoff = Eoff;                                % [J] @ Tj = 125°C
+inv_mosfet.Eerr = Eerr;                                % [J] @ Tj = 125°C
+inv_mosfet.Voff_sw_losses = Voff_sw_losses;            % [V]
+inv_mosfet.Ion_sw_losses = Ion_sw_losses;              % [A]
+inv_mosfet.JunctionTermalMass = JunctionTermalMass;    % [J/K]
+inv_mosfet.Rtim = Rtim;                                % [K/W]
+inv_mosfet.Rth_mosfet_JC = Rth_mosfet_JC;              % [K/W]
+inv_mosfet.Rth_mosfet_CH = Rth_mosfet_CH;              % [K/W]
+inv_mosfet.Rth_mosfet_JH = Rth_mosfet_JH;              % [K/W]
+inv_mosfet.Lstray_module = Lstray_module;              % [H]
+inv_mosfet.Irr = Irr;                                  % [A]
+inv_mosfet.Csnubber = Csnubber;                        % [F]
+inv_mosfet.Rsnubber = Rsnubber;                        % [Ohm]
+inv_mosfet.Csnubber_zvs = 4.5e-9;                      % [F]
+inv_mosfet.Rsnubber_zvs = 5e-3;                        % [Ohm]
 %[text] ## C-Caller Settings
 open_system(model);
 Simulink.importExternalCTypes(model,'Names',{'mavgflt_output_t'});
@@ -489,7 +467,7 @@ end
 %[appendix]{"version":"1.0"}
 %---
 %[metadata:view]
-%   data: {"layout":"onright","rightPanelPercent":35.8}
+%   data: {"layout":"onright","rightPanelPercent":19.3}
 %---
 %[output:1dd96712]
 %   data: {"dataType":"textualVariable","outputData":{"name":"Idc_FS","value":"   275"}}
@@ -528,7 +506,7 @@ end
 %   data: {"dataType":"matrix","outputData":{"columns":1,"name":"Ldrso","rows":2,"type":"double","value":[["0.091119986272030"],["4.708907792220440"]]}}
 %---
 %[output:28c3084b]
-%   data: {"dataType":"image","outputData":{"dataUri":"data:image\/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUUAAADECAYAAAAI7zOUAAAAAXNSR0IArs4c6QAAIABJREFUeF7tXX+QV9V1PyYmulYpLmIMrrCoi2Ni4q+ablYpGGJoZrKQSZos0DR0YRxSETOTZdgfdppS5adgUDEJNRuKnbAwTWFY\/miJrs0Pg5jEH8SoKcqy4mY14hIEIyahoXMeuV\/v3n0\/7n3vvvvuO3veTCa433vPvedzzvm8c3++006ePHkS+GEEGAFGgBEIEDiNSZE9gRFgBBiBdxBgUmRvYAQYAUZAQoBJ0QN3eOGFF6C5uRkaGxuhtbXVeo8OHz4M8+fPh\/Hjx8PKlSuhqqrKehuywFWrVsHOnTth48aNUFdXl2tbqvDjx49DW1sbjBs3Lhcs81Rmz549MGfOnKCJBQsWGPW\/SMxVTIS\/zZo1C5qamvKELBfZTIq5wGomtAhSxDZ37doFt956q1lnNUqrAZpnW2p3BLFs3rwZ6uvrE3tr2retW7fChAkTtGQnNi4VEGR+8OBB6OzshOrqapPq4BMpYsexP2iLNLoYKZ5DYSbFHED1XWTeJCwHKGKRZxasYm0SjKY4ICG2t7eDLuGa+AE1UjR9OZlglXdZ8qSIQbJhw4YARxxSyUM6EbxTp04NHB2fFStWDEn55fo4vBXDTxFQWPfYsWPBcFGVrxpPBJX4uwguNThFORxCYd\/FUEqUGxgYGDLEUofH+CMOIUXWgf8ths9LliwJssO9e\/cGMq688sohb3MRnPibqqs8vNfB9Z577oE777xzWFuiP2F9EO0jnvgIDGS7yMNMGXOBA2aIYhpC\/E1tK6oPUX\/ft29fZWgr+oVtRPUlLHDVvgh\/EvYSOuN\/hxFvVH2cDhG+PHbs2AreMmYqrjJuwq+uvfbawGfwwQxP1nnKlCnB348cOVLxF9Uf5T6bvnDyJjoT+aRJUR1SqG96EdjCecJ+F3NjY8aMCYhFBJwwOjohOtDg4GBsRhQnW82mZFIUwa06mQhG7PtNN900ZM4wjhSR6Pr7+436iv257777Ki8UHVwFbqpuKumqfZFxQsJGckdZwkay3jhfJWeGwgaLFi2qvNjCfhfkrmJq0jf0g7i+qMPfpBcXEpv8Ikuqr+Km+rJqIxkH+SUp+4PwZWxb7S++VHC+U7xEVX9XfcT1PLYJ6SWVJUuKcVmDILawuS8x1Lv55puHLU7EBVicEyQNjaIyRfnNGzd0Swq4qCCIWtiR+3PbbbcFwSoyR9RFfjng31WsdYbPataDGaFoS55XCyMeeRFHHqZhXzBw5QxJzmjV7CsqmwnrG76c4l5suKAUN2QM+03+m3gBRM0pqjiogZ30osLyarYoMtWwl6TanurDDz300JCpBIGleCEl+XwSMRX5O1lSDHN4lTzuvffeIauk8u\/qMFMYSQw71AwojhST3po6pBg3kW6bFFE38QJAMli8eDEIZzfFNSpTFNnfNddcU8law15EYaQopkPkwEEixAUQlRTVIR7WEaQZlSmG9S2KFKP6oq66hr3UZN1mzJgRmykmzWcmkaJ4OeDLR8U5jBTV9qJIUSUvMdXDpFgkrUe0nUemKDelBhSlTBH1FAE7efJk2L9\/f2XobIqrSooqbmFZqUmmKNskKZsSgR71Yovrm06mGBcGRWaKkyZNGjLqEdm+2KJlI1NUdWdS9JAURbYjD7Wi5hTF201nTjHKkZKyQVW2PAcTNacYN3EtD1fULEPM94g5InX4HDYEVk0oDyHVPXM6WUnSXCxO6uN8Fmbr8mJSmjlFdf4ybggXNremzhNH9U0ltqShvYxpUjZvOqeo2jDOJoIUsT84\/y2GvnHD5zRzivLKfFI8eEoZQbfIDp8F6DqrpDhHdscddwRV4laf5ZVak0xR9MV09TlqDkxdfZYzO\/w3DiFxRTxs9VmsKAtc4lbMRZmwlVAdXMVKv9rWk08+GcxH4SNWNUeNGhWQJD5icQX7JmwTtfqM5UX\/wrLYuFVX8eJEUhY4xPVNEBEuOghCEQsQwsZx23XiVo91Miud1WeBufoSllfJ0Y\/x5S78I2qRUK6j+hQuxqhTE7KNePU5gfYxKPAJO62hAqtuEcnzjRI3T5dnuyxbHwHT\/W5yJmi6AVq\/VyOvZNhWrTgUTO3mE6K5Z4oCnKhjS\/h7V1eXk+NnKvBMij654qm+hG2TkrcDJfUY\/QkXhoo4YpjUtzL9rm45w76ruw7i9CnzyylXUsR0f+nSpQF2UWdRMc3v6+szOudpy7mYFG0haU+OOkSUh8c6rZT57LOOfi7LqNM98uGFuH4IG\/LZ5xCUkHRqa2sD0osaPstzU6YB4NJBuC1GgBEYGQjklili+r1p0ya4\/fbbgxXGMFIUb\/WGhobgBAIPfUaG07GWjIDPCORCikh2y5Ytg7lz5wZXR8UttMjgqCQp\/3bxxRf7jCP3jRFgBCwh0NPTAxMnTrQkzVxMLqQYdooAu5Z0R5wgxdmzZw+7mglJsbe311xDz2qwHp4ZBADYJn7ZpGh75EKKKsRRmSJOyLa0tEBHR0eQUeLwGcuG3cFWNFC23Ib1sIWkPTlsE3tY2pBUtD2ck6JKhHJWGbeRuGigbBgbZRw4cKDQoQHrMRwBtoktr7Ajp+hYd0KKNqAqGigbOjAp2kLRrhwmRbt4ZpVWdKwzKWa1oGF9DkBDwBwUZ5s4ANmgCe9IMWzzbJI+eDRv+\/btScUy\/V40UJk6L1XmALSFpD05bBN7WNqQVHSsD8sU1Tm\/JCVxTnD58uXBsao8n6KBsqUbB6AtJO3JYZvYw9KGpKJjnYfPNqxoIIMD0AAsR0XZJo6A1mzGO1L09R60ooHStGdiMQ7ARIicF2CbOIc8tsGiYz00U1QPgqt3DBYBYdFA2dKZA9AWkvbksE3sYWlDUtGxnjh8li9scHnXoQpu0UDZMDbK4AC0haQ9OWwTe1jakFR0rCeSolAy6gtnNkDQkVE0UDp91CnDAaiDktsybBO3eCe1VnSsa5OirIhYcV67di24ut24aKCSDKn7OwegLlLuyrFN3GGt01LRsa5NinHfh9BRNGuZooHK2n9RnwPQFpL25LBN7GFpQ1LRsR5LiuptN3Fnk22AESejaKBs6ccBaAtJe3LYJvawtCGp6FgP3byN32LAr5SJJ+4LZTZA0JFRNFA6fdQpwwGog5LbMmwTt3gntVZ0rEeSovgWbpICrn4vGihbenIA2kLSnhy2iT0sbUgqOtb5mJ8NKxrI4AA0AMtRUbaJI6A1m\/GSFNXhc5IufCFEEkLv\/M4BqI+Vq5JsE1dI67XjHSnqddt9qaKBsqUxB6AtJO3JYZvYw9KGpKJjXXtLjg1ls8goGqgsfZfrcgDaQtKeHLaJPSxtSCo61pkUbVjRQAYHoAFYjoqyTRwBrdkMk2JJgNLsZmIxDsBEiJwXYJs4hzy2QSZFTXsUDZRmNxOLcQAmQuS8ANvEOeRMijYgZ1K0gaI9GVSIBBGhogsVPYqOdZ5TtMcTWpKoOC4VPZgUtdzWaSHvSfH48ePQ1tYGO3fuhMbGRpg3bx6sW7cOXN6QgxYpGihbXkGFTKjowaRoy7PtyHn0xSPwmX\/ZAq89+CU7AlNIic0UBSE2NDTAhAkToKurC1auXAnd3d2we\/fu4N9VVVUpmjWvwqRojlmeNZgU80Q3nWwKNun66auwsOt5OHz3jelAsFArlhTlL\/sNDg5WSLG\/vz\/4gp\/LbJFJ0YK1LYqgEIACDiq6UNBj1a4+WLXrgL+kiE6DnyMYGBiAmTNnwo4dO4Lh88KFC4OhdGtrq8UwO9UWPmFymRStQp1ZGIUAZFLM7AbWBZSCFFHrPXv2wJw5cyoA5PEhK9HGggULmBStu5p9gUyK9jHNKpGCTUpDilmNlVQfh+lLly4NiuFFtpwpJiFW\/O8UApAzxeL9SO2B93OKriDDYXNtbS309fXx8NkV6BnbYVLMCGAO1SnYZMb9T8Gj+4\/4O6eofpclzI5ZP1GAnzzYtGkT3H777XDvvfcyKeYQLHmIpBCAnCnm4RnZZHpPiqieyOKampoq2m7dujXI6nCYi\/\/G7Tn33HOPMRq45WfZsmUwd+5cqKurS1xowQZ6enqM2\/GpAq7c19TU+NSlVH2hogcqT0WXsusxbdo0OPLpzsAfS7ElB0lLPPInTnGrDm7P2bhxo3FwqR\/GEgLCFlt49dkY3lwrcKaYK7yphJfdJgcPvw1X3fmY36QoMsUNGzaA+HiVukqcJVNULc9bclLFQiGVyh6AMmhUdCm7HmKRxetMUc4Mm5ubg\/2K8hyinDFWV1dnDk4mxcwQOhNQ9gBkUnTmKloNYZZ4a9fzwSLLu956HV7\/5ue06uVRiC+EyAPVGJlUyISKHmgqKrqUWQ888zzj608FkXPGgUfgle13OI7Md5pjUnQMfZkdl2J2xaToOABCmpPnEsdXnwlHtnwZ+n7xk8I6lkiK6mkW0VP8gl9nZyfYGDbraM8LLToouStDhdyZFN35TFhLSIiYIeL\/49N9y9XwxU9cA729vYV1LPFCCPzc6aJFi+CRRx4Jts7gdhK8SgxvzpG36eStAZNi3gibyWdSNMPLReky2QRJUBCiwOa2j42Hf\/7UJYVfE5hIii0tLdDR0QHbtm0LTp0gEdpeYNFxGCZFHZTclSlTACahQkWXsuiB84e3bnm+kh2ifXbcchVMvvTcwFRFx7rWfYq44jxlypTgUohvfetbwW05Bw8e5OFzUrSF\/F4Wx01SjYoePHxOsrS93+UVZiEV5xBxyIz\/Lx6vSVF0cv369TB9+nTAjdpIjHhtmMsLZn14e9hyDSpkQkUPJkVbnh0tZ+V\/H4DV3zt1r4H8zGu4EHDILBOiD7GeuNCSP2R6LRT99tDrZXIpKmRCRQ8mxWSfNS2BGeFd3+uD7\/zklWFVkQBvunwM3PXZSZFii451JkVTi2csT4VMqOjBpJjRoQEA5whfPfo7ePCxgWDzddgjhsn4m5oZquW9JkX5cwRRZ595S46ZU1EhEyp6MCma+S+Wxkzw7odfggf3DMRWRvJbP+tyuOHS0UaNeEmKURc1yJq5nlcsGigjq8YUpkImVPRgUox2VrF3EL+Z8uP9R4asFkdlgzdeVg1f+9xlmcKl6FjX3pIjZ4qZNE5ZuWigUnZ7WDUqZEJFDybFU5kfPut6XoIXX3srcgisOjNmgnPrx8Fnr3lf4pDYJH6KjnWeUzSxloWyVMiEih4jiRSR\/PoGj8Oa7\/XBwd+c2jyt+yABTp10Lnzl47VWCTCsfe9IUee2bVSEj\/nputPQclTIhIoelEjxx3tfgIsuuggeffE3sOWnrxoTH2KB5Df+3DPhnz51CZx\/zntzJ8BSkGK6UM+\/VtFvD1saUiETKnqUiRRFZvfyb96GzT95BV4+\/Lb2UFf2X7H6e8Ol58KXPzYezjj9XYWQX1RMFR3rPHy2xXaacqiQCRU9fCJFQXrf33cYvvvErwOPitrikuRugvgw61syfeKpDFA6NZJUv8jfS0GKeLt2e3t7Bac8vvucZISigUrqn+7vVMiEih6uSFEQ3uN9b8C\/P3ZqK0tawhO+Joa6V48fBfOvvxBefvlluP7Kdz4bouuTvpUrOtYTM0W8DRuvDxPXhIk5x\/r6+tDvM+cFcNFA2dKLCplQ0SMrKQqye\/sPf4Rv\/PBl2P\/aW6nm8lT\/kjO9j14yGv72I+8PisRle1RsUnSsp9qSw7fkpKdIKo5LRY8oUhRk98eTJ+GBH\/XDM79600p2JxMbDm0\/MO7sYFvLn53x7kTSS\/I6KjbxmhTRCJwpJrmi2e9UHLeMegiiw2zrZy8dhe8++Wt4buBN6D30JgwcPWFmyIjScob34Zpz4OYbauC005KPttlovIw2CdPbe1LETvOcog2XPSWDiuP6pIc8hP327l8FRIeP6V68OCvLZDfxvCr4wl++H9436oxgOIvt+7CI4ZNNskRMKUgxi4K26hYNlC09qDhu3noIonvzd\/8H\/\/bYr+CXr\/zWOtGJoeyJEyfg4rFnw4cuPAearnsfjK56T+ahrC1\/MZGTt01M+pKlbNGxnrjQkkU5m3WLBsqWLlQc11QP+fTEc6+8CQ8\/fxj2\/fq3VrM5YSM5q7uo+ky4\/pLRgHvyBAmqtjTVxZYv2JZDRY+iY51J0bZnJsij4riox7v\/\/NSK6GvHfh\/cnYcrr7aHrVFE9+ELz4FPXnFehejk+UJTk1KyycSJE03V966816Qott+MHz\/e+U3bqqWKBsqW5\/gcgIJY3jh+Arr3vgaPH3gjN5KTszZchR0\/pgr++oNjAMlOJUJb2EfJ8dkmJrpT0aPoWE\/MFMOuEePN2yauOrSsK8eVh6t4CcC2p16D3kP5ZXIqyeF\/N1w6GpquvQDe\/a7TIoeu6ZG0V9OVTez1OFwSFT28J8Uw+HE1esuWLfzhqhRentZxZZL7r2dfh5\/3HwvOvuY1XA0jOdxi8vlrL4DRZ51O5vQE6pnWJinMn2sVKnp4T4phmSJ+3W\/jxo0Qd8eiXC\/uRh1VflTZooGy5c1iLk5s5cDNwd0\/PwQPPzeYK8GFkRweD5vzkQug6j3mG4epBCCToi3Ptien6FhPPNEyf\/78QFtxzE9H9ePHj8OyZctg7ty5AXFiZrl79+7QeUk8QtjV1ZU4Z1k0UDp6y9tI\/vVH\/ZXhatYzrlFtq6usuKUEFx8m\/GnvnEyEOv03KcOkaIKWm7JUbFJ0rCfOKdowZ9yxQCTMvr6+xHPURQMVDFP\/NFzdf+gt+NrDL1nfTiKT3AfHnQ0fv3wM1J1\/VsUEPmwQFp2hEoCcKdqIcLsyio51J6QYlyniMcINGzZUUN28eTPgZRPqUwRQSIK636cIcws1k5tx5flw9h8OBxeB5pnF2XXRcGlMii5QNmuDik2KiHUZ6VxJUb7FO4zscJjd1tYGDQ0N0NTUFNzGs3jx4tD5SgQKn56eHjNPMSiN5183PfEGfPcXxxJrjRt1elDm\/eecDl+4ehT81cSzgvOz4u9RAvr7+6GmpiZRvu8FqOiBOFPRpex6TJs2reL2vb29hYVArqQotBLk2NraGpoFinIqScqo5PX2EEPiGV9\/KvKbFZjxTf\/AebBw6kWZz7hSeZtT0YOHz4VxT2TDecW6rqaJCy0tLS3Q0dExZKXZ9OqwOLKTOyrKzZ49exh55gEUzg1et+LxYVghCd79ucvgY5dV6+KoXY4KmVDRg0lR23WdFcwj1k06H0qKWb\/7jJmhTKYob8mSJbB69eoh5KqWw+EzzjGGrXTbBAqzQzUzRCL8zrwPwTlnnp45G4wzABUyoaIHk6IJXbgpazPW0\/Q4Vaao05BKrGJOMYwwm5ubYWBgAOL2P9oACsnwyYNHYd6Dz1ZUQDJcP+tyuOHS0TpqZS5DhUyo6MGkmNmlrQuwEetZOuVkTjFLB0XdrECJleSun75a6c6mv78CGj881kb3tGVQIRMqejAparuus4JZYz1rR4eRolgUOXToEKxZsyYYzu7du3dYO2X67jMS4q1dz1c+FITZYfctV+c6TI4yDBUyoaIHk2JWCrFf3ztStK+iHYlpgQoIccsvgw+E41MkIXIA2vEF21KoEDwVPdLGui2\/ID983vqzV+EfNj\/vBSEyKdpyW7tyqJAJFT28JkV587XqhmUYPj\/64pFgldmHDFHgR8VxqejBLyq7Lxgb0rwmxSgFcZ5xypQpsRuxbYAjyzAFCofNV935mFeEyAFo2yvsyKNC8FT0MI11O17wjpRUw2fTzds2Om0K1MyvPw0\/+tM8Ii6quNpyk6QrFceloge\/qJI81v3vprFuu4epSNH3S2bVLPHpf\/yobdxSy6NCJlT0YFJM7cq5VfSaFOPmFKNus8kLKROgZtz\/VGX7DRIiX7ll3ypMivYxzSqRik1MYj0rZmH1U2WKeXQkSaYuUHKWOPnSc2HHLVcliXb6OxXHpaIHZ4pO3V+rMd1Y1xKWolAiKarH8uLuRkzRvnYVXaB8zhI5ALXN7bQgFYKnoodurOflJLGkGHW7je5t2TY7rQOUvAVn6qRzYduX\/MoSmRRteoQ9WVTIhIoeOrFuz\/rDJaW6EMLX1Wffs0QmxTxdOb1sKmRCRQ+vSTHqfsO4K77Su2Z8TR2gqr\/yP4EQXFjxacVZ1oyK41LRg19UeUVserk6sZ5eenLNxDlFHCq3t7eDWG1GQpwzZw6sWLEi+ISAqycJKHnofP\/sy2H2dRe46ppRO1TIhIoeTIpG7uukcFKs592JRFLEDkTdjZh352T5SUCJobPPWSIHoEuP0W+LCsFT0SMp1vUtm66kFimmE223VhxQ8jacGy4ZDd0Lr7bbuEVpVByXih78orLo3JZEeU2K6nYcSzqnEhMHFF4cu7Dr1E04vm3WVpWlQiZU9GBSTBWOuVbymhRRc7z8oba21un8YRjicUCVZejMAZhrLKUWToXgqejhNSmW5eowsers+9CZSTE1b+VakQqZUNHDa1LM1RMNhUcBJc8n+j50ZlI0NLqj4lTIhIoeTIqajh8FlLxh+\/DdN2pKK64YFceloge\/qIqLhaiWvSPFMn24qkyrzsIBqJAJFT2YFJkUVQRKvSVHJsXW6ROhdXqtfxZWekSFTKjowaToX8h4lymqEPl+S45YZPHpdu04N6NCJlT0YFJkUjTKFH2\/JadMW3F4+Oxf8LFN\/LSJ15li1OZtm7fkyEcI474QGAZUmbbicAD6GYCcKfpnF69JMe9bclD+smXLYO7cuVBXVwdxF9jGkWJZ5hM5AP0LQLaJfzbxmhQRLpe35MRloCpQq3b1wapdBwKLlmF\/ImeK\/gUf28RPm3hPigibq1tyTDLFsu1P5AD0MwA5U\/TPLqUgxbxhk48TRn0lUAWqjIssHIB5e1I6+VRW0qnowaQo+bEgx9bWVqivrx\/i4QgUPj09PTBw9AQ0buoP\/vsvLjwTNnzGzwtlw0K0v78fampq0kWvR7Wo6IGQUtGl7HpMmzat4uG9vb2FebtXm7ejtgAhOvLbo4ybtnn4XJiPJzZMJcOioseIzhTVLT84d7lkyRJYvXp1sBotPzJQ8iJLWTZtMykmclNhBaiQCRU9RjQpmiziyECV4at9URFOxXGp6MHzvIW9iyIbHvGkqGuSMFL0\/XssYbpRIRMqejAp6kagu3Lek6L4ep8KSdzpkzzgk4Eq40kWHj7n4RV2ZFIheCp6eE2KYjV41qxZ3nyOoMyLLJyV2CEx21KokAkVPbwnxZaWFujo6Bi28GHbMZPkCaDk7zuX6SQLZ4pJFi7udypkQkUPr0kR3RRPmfT19QHuHSzyCSPFsq08c6ZYpAdFt02FTKjo4TUp+vjhqrIe7+NM0U9C5BeVf3bxmhR9gksAVdbjfUyKPnnT0L5QybCo6MGkqBkrAqgyrzxzVqJpbMfFqJAJFT28J0Vx9G7nzp3Q2NgI8+bNg3Xr1sHatWuhurramfsiUN\/\/2XNw1Z2PBW2W6Q5FGSQqjktFD35ROQth7Ya8JkX5LPKECROgq6sLVq5cCd3d3bB79+7g31VVVdrKZimokuL9sy+H2deV5yIIHj5nsX6+dakQPBU9vCZF+Wzy4OBghRTxNo7ly5c7zRYRqAXfeKRysWwZV545K8mX3NJKp0ImVPTwmhTRyVatWgUDAwMwc+ZM2LFjRzB8XrhwYTCUdrlNB4Fq2\/RDaNv+QuD7ZdyjyKSYlrbyrUeFTKjo4T0pojuqR\/1WrFjh\/IQLAnVFy3\/Co\/uPQBnPPPPwOV9iyyKdCplQ0aMUpJjF4WzVRaBGzfsO4DE\/JkVbqKaXQyUAOXtP7wN51WRS1EQWgTry6c6g9A2XjIbuhVdr1vSrGBUyoaIHk6Jf8YG9YVLUtEntFR+Bo59YFZRe9\/nL4Iv14zRr+lWMCplQ0YNJ0a\/4KAUpyvsUBXwLFixwusiC7cqkWNY9ihyA\/gUg28Q\/m3idKQpCHDduXIUExd8QSpf7FGum\/h28dc28wIJl3Y7DAehfALJN\/LOJ16SofkNFwBf30fq8IGZSzAvZdHJ5+JwOtzxrUbGJ16SIBsTtOOIkizi9gnsXa2trnW7LueBv7oTfj78+8KnDd9+Yp2\/lKpuK41LRgzPFXN09lXCvSTHu6jBZW\/w0wfbt21MBoFvp\/C9+E06cd1mpt+NwAOpa2205KgRPRQ+vSdGta8a3dt6X\/gP+eNZ5pd6Ow6Tok0e90xcqZEJFDyZFzTgp+5VhQk0qjktFD35RaQagw2KlIEX8JEF7e3sFliKO+QlSvOuzk2D+9Rc6NJHdpqiQCRU9mBTt+rcNad6TIi6q4GJLZ2dncH+imGesr693uldRkGKZ9yhyANoIGfsyqBA8FT28JkWftuQIUizr7Tg8fLZPZrYkUiETKnp4TYrodL5limXeuM2Zoi0asyuHCplQ0cN7UkT3SzOnqF43tnnzZsAht\/rgRvDm5ubgzkZ8cHuPGKrLZTlTtEsEWaVRCUB+UWX1BPv1S0GKpmrjsHvp0qXw1a9+NZiHRILEjDOM7MI2h4e1J0ixzBu3OQBNPclNeSoET0UPkqSourJYnMGbutVsEbPQvr6+xEUbJMUy36PIc4puCC5NK1TIhIoeI4IUcYi8ZMkSWL16NdTV1Q3xW8wgN2zYUPlb1DAbSbHM9ygyKaahKzd1qJAJFT3Ik6L8RcCmpqYhXq7+hkPpxYsXw8aNG4eRJ5Li6a\/\/Lzy+dLqbSMmpFfzoV01NTU7S3YmlogciRkWXsusxbdq0igP39va6c2alpdNOnjx5Mq\/Ww64ei2srjkCRFBffNAE6PnlxXt11IpfK25yKHjzP68TtjRohmynGEVwUQqLO7Nmzh809IimWfeM26l20wY28M6YwFT3YJrY8wp6con0rl0xRlxDVzeFxq9RIimc9+W1478Ef20OfJTECjICXCJAbPqt7DwXquIgyadIkaGlpgY6OjmDeUC6LN3yHzSd6aTXuFCPACJBEIJdMkSRSrBQjwAiMCASYFEeEmVlJRoAR0EWASVEXKS7HCDB4WKX2AAAGFElEQVQCIwIBJsURYWZWkhFgBHQRYFLURYrLMQKMwIhAwHtSlFenFyxYkHhG2ger6fRZbFvauXNn0OXGxkan39HWxUlHF1lW3JFO3TbzKKerh1wu6samPPpnIlNXF\/mmqrLEjsChiC+Gira9JkX5Igl00La2NmhoaHD6aVUTZ8Wyun3GizDwwaOPuvs6TfuStbyuLqIdoccTTzzh1dYqXT3Ui0t0LyvJirNJfV1d5JcTHistQ+zIhIj3IRTx2RPsg9ekiIZdvnw5rF27NriCDJ109+7dXmZUwqBp++yjbqa6oA7PPPMMPPvss6GXf5gEv82yunpgZvWDH\/zA69GIiS7ydX34b3zwpipfH\/lYMPbR9bflS5Epqnctxp148cXQafvso9Oa6CKCFYdpqEvYjUhF2UhXDyT1Q4cOQU9PD+zduzfywuOi9MB2dXXRzSiL1CWubR4+R6CjZk9lIMU0ffZVLxNd0ImnTJkCY8aMibwmrqgA1NUDy913332Vob+PLypdXeSpHCT4qCv5irJJUrtMihEI6b4VkwB2+btpn+OuS3PZ77C2dHWRh50+LrTo6qHOIfr4stLVRe27jwTPmWKKCNedP0khOrcqJn32MehkYHR1US8KRhk+nWPX1UOXcHJzHg3BurqoJOi7r6mqc6YY4QxlnBfR7XMZnFRXF5VIo25Z14j5XIro6iHf2iRWbJHcfVqc0NUlLFPEj8OtXLkSqqqqcsHZplAmxRg0dfdk2TRIVllRfZYNHZZd+bhXUUcX30kR+6erh1zOR3uY6CJ\/hdPXPZdRscakmJWFuD4jwAgwApYQ8HqfoiUdWQwjwAgwAtoIMClqQ8UFGQFGYCQgwKQ4EqzMOjICjIA2AkyK2lBxQUaAERgJCDApjgQrO9RRvv3H5GYWHzcXi1tm8txzKa92l+3UiUO3ctoUk6JTuPNtzORSCZOyJr1Ou\/\/SV1Ls6urKfW9f3Kd9TbDnsnYQYFK0g6MXUkyIzqSsiXLqqRDdukyKbRD2vXNd\/LicPQSYFO1h6USSejmtGKLKF4qKTcf9\/f3Q3NwMeJIBn7iyKHf+\/PnB7TD4xA3lxKkKtazch6ghZ9QnbZEUjx07FvwPL95V68uysX\/irj1x7G3UqFFBPdFveXM86o31Ozs7gyvodD+rqxK82se4DdEqyce9hDhTdBI62o0wKWpD5UdB+dICNZjkwMPe4sWiIvtQL2oIKysu8I271EG9EFe90CJu+Kxe4iqXfeCBBwJSE9\/9RlIRx9KwTflb4XK9wcHBgPgXLVpUuXxY\/h2PtCEOBw8eDEgRHyR\/PLpXX18fkKV876Bs5TBSxMtPZeKNOjrHpOhHvKTpBZNiGtQKrKNebyV3JS4bUclLLosZpXyZL8qMOmalEmYYScaRTNRvJiSCfd+yZUtAckiK6lnruMsQ9u3bB\/I8YVyWFkaKMgnGvTxM9OFMscCACmmaSdEve2j1Rj7TKg8zVVKUh5A41MNHXP4ql8Vh8Jw5c4a1HbZ6rGZWJqQYR9pxJCKyXvE9m8mTJ8PRo0dDSTHs0w5ynx966CFob28fpmvY1fdhpIgVxQUR8gUSdXV1Q2QyKWq5speFmBS9NIt+p+RhZnd3d+VzDZj9yRlU3PA5LFOM6kERmSKStpxhqsPnLJliHNKcKer7IaWSTIols2ZYBtLX1xdkL+qQGOfa1qxZE8ydYT15zi5uTlHM\/c2aNWvYR8JszinKBLtt27bAEiILUzPZxYsXB\/ON4kovMUcYNnw2mVMUiy4Cp6Q5xah5T\/U6LnmIL+Y1UXbY1V08fPYrCJkU\/bJHYm\/U1Wd5BVQE+NixY4OhJS5e4MIAPuvXrw\/+WywwqGWxjLz6HLfxOmr1GWUk7VOUV36xvLxoEUWK8vAZpws6OjoCXXAqAJ+w+xvF1AGWR70wiw5bfcb6UV+Ni8oUkZDVb7ioQ2kZI9GHp59+OiBFdeGISTHR7Z0WYFJ0Cjc3VgQCafdOJs0p2tKFSdEWknbkMCnawZGleIRA2LalNDdoMyl6ZFSHXWFSdAg2N+UGAXV4n\/YGbfXsszrvaUMbPvtsA0W7Mv4fc0rj4GUWu+4AAAAASUVORK5CYII=","height":196,"width":325}}
+%   data: {"dataType":"image","outputData":{"dataUri":"data:image\/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHcAAABICAYAAADMFWryAAAAAXNSR0IArs4c6QAADJNJREFUeF7tXWtoVdkVXoFhOjpjR6PRIGk0yUQ7WEbHOB3j2EoRa+dHtBVbjUJTFVE66I\/6fqAoPuOrPgafQWzBmD8WIv5QKx1xNA4BJ0KhVjs+QhqGSZNJx7bREkj5tqzTdffd53nPTc69OQcCueex99rrW6\/9XDk9PT09FF9ZyYGcGNysxFU1KgHc3bt30+nTpwnKnJOTY7V6\/PjxVFNTQ7m5ub450dXVRevXr1ff7dmzhwYMGEDHjh2jmTNnUmlpqe\/yTB\/s3buX7ty5Y9GI\/58+fUrz5s0LpXy9kIcPH9LatWupurrasQ1o+5EjR2jp0qWuvAubZtBogdvR0UGrVq2ijRs30sWLF2natGk0efJkAuNGjx4dGqPq6uro6NGjdPbs2bSA297eTosWLaIVK1aERrMOLnjS2tpqCaudBOlCZ\/cegAibZvA5p6ioqGfZsmVKusCQhoYG9X9nZyfdunWLysvL6fLlywrsgwcPKkk8efKkorOiokI1sKWlJYE4SOGCBQvo\/PnzBK1nzZ0zZ456jy88hwDhMmm4zhz81uuGJeD39u3bR2vWrKF79+6pMrldS5YsSbi3bt069RwM2LBhg\/UuymaaIOzyO75vAsJEV319vVX2yJEjlTDfvXs36d7QoUMT6gHNK1euVDy7dOmSog0W1c4KmepG+8H\/nIaGhh78g8pPnTqlwIW5OXPmjAI4Pz9fmWk8v3btGl24cEGZP6khEydO9AQuBAGNttNcMJvLR6PAXIAPMCTQTs90zZWWh8EEUGAqBA0CyuUzuFIgdZpR\/urVqy3LIwWZy2SrIWnGd7t27aIDBw4owNC2wsJCo3LI7x48eGApCisCK4cTT5TmyoDq6tWrtHz5cjpx4gTdv3+fDh06pIAFw7nBkEKWfK5El2Y7zXUDl8vZv3+\/Kpq1f8yYMQlAs9axkMCNsM81mWWTFsInQ2tZI51AknThOymc\/B1okpYIv01mWVoLk+WbMWNGQluZ9vnz5ydoL99n4dd5AiuRAK5TA02FhQ0um2YIEC4nwKTvtgN31qxZlnkD46XA2IEk39N9JMzjkydPlLnkmIFpZhMqQTZpIADdunUrbdu2TRWvuzW2gvDp8oK5lkplcg+SJwngAjz2udJsLV68WPkrNl1MEHxd2OBK6cvLy7NMspuU2oHr5C78aK5kslNAyFrJvQv0PFhA5f\/gnexByJhF11xdwPi3G08UuI2NjT0LFy6kFy9eqO4P\/uS4Bv6fPXu2kjDpLzkQgFlAAKb7Ry\/+y9QVYomE5EozF8TnSkbJIEX3ufozN5\/L7gJtl2AXFBQkgIbgk8FFvMLmHK4DZdgFpKH5XFO0LBuvdynsIla7yFNnFEspwDNFgWzmmpubk\/rWsm5ppiQzWCtgJsG8SZMmKTOIC7S0tbVZ3aR0RMscGUNwpT9GHHP8+HFlBfEOLBMuBKc6zVu2bKHt27f7jpYlT5ICKjsTkI33dZ\/lp\/8NYcKlB5ZR41NOe3t7j+zPmQhMZYQqag2W9EhLgPtO\/Un5ndcRqr5uezy23NcIpLH+BHBNYT07fRkdm+iBWbt9+7brkFwa2xIXrXHAAlf2MaUv8TKOyv6rrKwsBjdCIpYwcYCONSJLOfuD\/pTpPrcBQrFz504qKSmhpqamBHCLi4sj1NTMJuW\/hR\/QfyYupo6DP\/LckASzDC2Voy+skTz+ameOcX\/UqFFUW1ubBO6jR488E9NXLz5+\/JiKior6qnpP9TZ3PKcJOxqCg4taZN\/PLYIE+OfOnaNNmzap\/psJ3OvXr3sivi9fQt8bAxBRvirOtVDrN92pgeungbog4Fto+eHDh1UxMMux5vrhaPK7sz7+nD79otN6ENgsp0IGRmNisxyMgzC5nz3+J\/3+Tis1f\/2c8Nt0vfKPv9JXv1vuuZKEgErOMbp1ffQaYnCTeQ6QCoZ8i2obv6S6xi\/VC07gmVArzH2Npr41hI7N\/65vS+jaz9WnmjyLTRaZZdYkMPqLti6qudVCf\/77vwKB5cQ\/lI\/rw3HDaPfPkteX+XVzriNU0EhE0UEWyPklxo\/gBH0XQGGm6w9NX9Hf2rqoub2Lup4\/p7YusjWHQeuS3zFwhUNeo+K8gfTzshH0QclgVSc\/c6vHLz9dNVfOcrhVrj\/3S4xb+WBE3qBX6ebDr+mTBx0J2qNMno2vcis3yHMJCAAbm\/86VbyTRz8sHWLR4RU0r\/X75WeSz0VFQbTURKAbMQxG9dUnSoNkVOi1wam+BwC6u7upOO8NVVTpiIH0k3HDaOyI1y2N8qNdqdLj9L0bP\/VvXc1yKsTaEYMA46Pav6RStPpW1x7cKxo2gN4vGkzvF71JJXkvV4u4gZMJgxhoR+TBzf3Nn4ygAiiYt5LhA+kXZflUXvymJ2BSlhAiisENwEVd0iSwALP+1+96DiYCVO\/5kxhcz6z6\/4sMLo+L8pOmzeWRAJXpyXpw7WZ\/3GaFvAQAcggtasCC\/qwF18syG6cJe7lURV+mwprL5himGOBG7cpacHnHQRANlUOOmFnRd74B3F8d\/SP99vpThaefQe\/eFICsBReai8l4rN3FHhjeRCWZ62WBHKb\/eC8MT\/YD3M6f1ljdlihqbVab5TA2X7Np1s3y6O99n7758ctloIiMp741uDcV0nNdWau5YYALLvIarClTplgblr7zg3n07\/deTlFdqiqgkd9+xTPDe\/PFTJisBz+mT5\/ua348afgxqFlG5fpi7eG\/PEHdw8aqbk9UTXK\/NssAjHfZ69qEgOrGjRtq5T1vTML\/vI+Uo+QZbw+luqXv9KYy+qqr35pltyjaqSvE4H5c+TZVvpfvi+G9+XK\/BTeV+VwGN8rBVL8wy\/ruc6k5+o5xr1rF4Ea1f9tvhh+9AubnPYAb9WCqX2guGqnvXpMHkAQ5gwrgTi0ZTPUfvetHJnr93az3udxPraystKJdcDmVDV4A92zVOJo9fnivA+anwqwHNx2zQgD3jU+rCett4yscDvhZ5J+wzEbfXe50gk04pMalpJMDSWuo5IEjqNjrbvN0EhmXHYwDaV0gF4yk+KuwOOC6PzesiuJyep8DSftzwzihVR7REyWzLo+FsJuj1t1SKttpwobTrkdjV0+os0KoRB7ti9\/6BH7YDfZTHgJGHO\/Hp+GZBNm0oc1PHel6V44geh0xDN3nyrFoPjxL7zuniwFO5erzzXYgSgHoCzpNdfKh3HPnzlWrZeTMmxON6hyqMJbZcCWSabiHMw7lBH5fMUw3aaYJEf00n1T2SaWjnaZpVUdww1qJkQ3g6oxKZUYscuCGMbac6WZZghK1k+ICa25YY8uZHFDxsUtVVVUq\/0Iq4+qR0twwx5adTg9PR6O9lil9qlxoDxBxIY+A7Apllc+Nx5a9iklmvBePLWcGToGoDL2fG4iK+KO0cCBUcL0OAISZiEr6US9DhX6H8NLBdUlz2MOzHO8gpsh4cN2W3urgRAncdI3c8bGNgcA1RZSclAHMZA2SxweasmKx1DqtfWZw9NEjjK9yviHOG2BKISfLlhnKJkyYoA520XMtmGjmxBRIonXz5k2VWAMXklBwe2X6N7f2mEbLcPreoEGDrCxqpkNnpMVzEtLA4JoI410H0izroztyq4mepYsP4ebkFkgaZcp+xQwEmJyVC1lSOAehnu1E0sO7EHfs2KEynuFCxhVZFgRUnrnFNHP2Ek6YJQcTTJlM3Npj4iEERQo76NNzKKQEruyfSnMmp8ecJMbJ55pmZDipkxx7NvljvU45CYD0MiZw7ejUJxDkoIudcDC4TKc+6cC\/OauI3\/boimDaDgs8AoPrZ2hLTj9J4CWApiP12VwzkTJjlxQmPTAy0cZl2IFr1x4ddAkum1+Z3UsmTmQfqY9c6eDK76Wb0l0Ml6cLS1rAdToR3S5qlIQhqRTPl+oMcNJct8AiHZrLdUpwkUVL5mlgmllz7cDQwfXbHl1z7SYspOY6KaPR53rpyuhmTO70k99LcAGOnjGMJ8pN7+lJCdkk+fW50s\/zJACSMSHDqBu4kmYdXK8+l8vQ22Pnc3kS3i5vkcw3wWlUTRP3SeA67RXSl6RI3yyf8X09by3eQUq4K1euWGnjkAHTFC3b9VVN0TKCLiefafqGAyATuDKXraSZfanUSG4rgiwIrszvYJe5zMksc15gBKdy3NukrQzss2fPlJCi1yDjjsDRcjo69Zlept8MYXZdIU77nio\/jODqsyY4nWbz5s0q1XlY+eVTJTwK3+uL6LzmXjL12WG9TMk\/grbTOELFwMLMIP04J6ZAkBQngwrK6r797n8zsx19072LsQAAAABJRU5ErkJggg==","height":72,"width":119}}
 %---
 %[output:2330891c]
 %   data: {"dataType":"textualVariable","outputData":{"name":"heat_capacity","value":"  13.199999999999999"}}
