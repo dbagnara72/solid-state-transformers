@@ -150,7 +150,8 @@ flt_dq = 2/(s/(2*pi*50)+1)^2;
 flt_dq_d = c2d(flt_dq,ts_inv);
 % figure; bode(flt_dq_d); grid on
 % [num50 den50]=tfdata(flt_dq_d,'v');
-iph_grid_pu_ref = 3.75;
+% iph_grid_pu_ref = 3.75;
+iph_grid_pu_ref = 2.75;
 %[text] ### DAB Control parameters
 kp_i_dab = 0.25;
 ki_i_dab = 18;
