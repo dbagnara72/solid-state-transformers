@@ -64,7 +64,7 @@ Idab2_dc_nom = Pnom/Vdab2_dc_nom;
 Idc_FS = max(Idab1_dc_nom,Idab2_dc_nom) * margin_factor %[output:1dd96712]
 Vdc_FS = max(Vdab1_dc_nom,Vdab2_dc_nom) * margin_factor %[output:174c5e41]
 %[text] ### AFE simulation sampling time
-dead_time_DAB = 0;
+dead_time_DAB = 3e-6;
 dead_time_AFE = 0;
 dead_time_INV = 0;
 delay_pwm = 0;

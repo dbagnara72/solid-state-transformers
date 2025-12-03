@@ -97,7 +97,7 @@ yyaxis left;
 plot(time_tc_sim,i1_dab_transformer_modA_sim,'-','LineWidth',tratto1,'Color',colore1);
 ylabel('$i/A$','Interpreter','latex','FontSize', fontsize_plotting);
 hold on
-set(gca,'ylim',[-1000 1000]);
+% set(gca,'ylim',[-1000 1000]);
 yyaxis right;
 ax = gca;
 ax.YColor = [0.5 0.5 0.5]; 
@@ -145,7 +145,7 @@ yyaxis left;
 plot(time_tc_sim,ac_grid_current_sim,'-','LineWidth',tratto1,'Color',colore1);
 ylabel('$i/A$','Interpreter','latex','FontSize', fontsize_plotting);
 hold on
-set(gca,'ylim',[-2000 2000]);
+% set(gca,'ylim',[-2000 2000]);
 yyaxis right;
 ax = gca;
 ax.YColor = [0.5 0.5 0.5]; 
@@ -194,7 +194,7 @@ yyaxis left;
 plot(time_tc_sim,inverter_device_data_modA_sim(:,1),'-','LineWidth',tratto1,'Color',colore1);
 ylabel('$p/W$','Interpreter','latex','FontSize', fontsize_plotting);
 hold on
-set(gca,'ylim',[300 600]);
+% set(gca,'ylim',[300 600]);
 yyaxis right;
 ax = gca;
 ax.YColor = [0.5 0.5 0.5]; 
@@ -228,7 +228,7 @@ grid on
 subplot 212
 plot(time_tc_sim,inverter_device_data_modA_sim(:,3),'-','LineWidth',tratto1,'Color',colore1);
 ylabel('$i/A$','Interpreter','latex','FontSize', fontsize_plotting);
-set(gca,'ylim',[-1600 1000]);
+% set(gca,'ylim',[-1600 1000]);
 legend('$i_{Q_1}$','Location','northwestoutside',...
     'Interpreter','latex','FontSize',fontsize_plotting);
 xlabel('$t/s$','Interpreter','latex','FontSize', fontsize_plotting);
