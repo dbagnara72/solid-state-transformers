@@ -16,8 +16,8 @@ rpi_enable = 0;
 rpi_ccaller = 0;
 %[text] ### Settings voltage application
 application400 = 0;
-application690 = 1;
-application480 = 0;
+application690 = 0;
+application480 = 1;
 
 n_modules = 2;
 %[text] ## Settings and initialization
@@ -58,11 +58,11 @@ Ns_afe = ceil(t_misura/ts_afe);
 Ns_inv = ceil(t_misura/ts_inv);
 
 Pnom = 275e3;
-ubattery = 1250;
+ubattery = 750;
 margin_factor = 1.25;
 Vdab1_dc_nom = ubattery;
 Idab1_dc_nom = Pnom/Vdab1_dc_nom;
-Vdab2_dc_nom = 1500;
+Vdab2_dc_nom = 750;
 Idab2_dc_nom = Pnom/Vdab2_dc_nom;
 
 Idc_FS = max(Idab1_dc_nom,Idab2_dc_nom) * margin_factor %[output:6e4cc00d]
@@ -218,7 +218,7 @@ ddsrf_f = omega_f/(s+omega_f);
 ddsrf_fd = c2d(ddsrf_f,ts_afe);
 %%
 %[text] ### First Harmonic Tracker for Ugrid cleaning
-omega0 = 2*pi*50;
+omega0 = 2*pi*f_grid;
 Afht = [0 1; -omega0^2 -0.05*omega0] % impianto nel continuo %[output:75c58cb8]
 Cfht = [1 0];
 poles_fht = [-1 -4]*omega0;
@@ -315,7 +315,7 @@ ap_flt_ss = ss(A,B,C,D,ts_afe);
 % grid on
 %%
 %[text] ### Single phase pll
-freq = 50;
+freq = f_grid;
 kp_pll = 314;
 ki_pll = 3140;
 
@@ -329,7 +329,7 @@ Adrso = eye(2) + Arso*ts_inv;
 polesdrso = exp(ts_inv*polesrso);
 Ldrso = acker(Adrso',Crso',polesdrso)' %[output:16217f48]
 
-freq_filter = 50;
+freq_filter = f_grid;
 tau_f = 1/2/pi/freq_filter;
 Hs = 1/(s*tau_f+1);
 Hd = c2d(Hs,ts_inv);
@@ -383,7 +383,9 @@ grid on %[output:28c3084b]
 %[text] #### HeatSink settings
 heatsink_liquid_2kW; %[output:2330891c] %[output:55c0aace] %[output:6d4591c7]
 %[text] #### DEVICES settings
-danfoss_SKM1700MB20R4S2I4; % SiC-Mosfet full leg
+% danfoss_SKM1700MB20R4S2I4; % SiC-Mosfet full leg
+wolfspeed_CAB760M12HM3;
+
 dab_mosfet.Vth = Vth;                                  % [V]
 dab_mosfet.Rds_on = Rds_on;                            % [Ohm]
 dab_mosfet.Vdon_diode = Vdon_diode;                    % [V]
@@ -407,50 +409,50 @@ dab_mosfet.Csnubber_zvs = 4.5e-9;                      % [F]
 dab_mosfet.Rsnubber_zvs = 5e-3;                        % [Ohm]
 
 danfoss_SKM1400MLI12BM7; % 3L-NPC Si-IGBT
-inv.Vth = Vth;                                  % [V]
-inv.Vce_sat = Vce_sat;                          % [V]
-inv.Rce_on = Rce_on;                            % [Ohm]
-inv.Vdon_diode = Vdon_diode;                    % [V]
-inv.Rdon_diode = Rdon_diode;                    % [Ohm]
-inv.Eon = Eon;                                  % [J] @ Tj = 125°C
-inv.Eoff = Eoff;                                % [J] @ Tj = 125°C
-inv.Erec = Erec;                                % [J] @ Tj = 125°C
-inv.Voff_sw_losses = Voff_sw_losses;            % [V]
-inv.Ion_sw_losses = Ion_sw_losses;              % [A]
-inv.JunctionTermalMass = JunctionTermalMass;    % [J/K]
-inv.Rtim = Rtim;                                % [K/W]
-inv.Rth_switch_JC = Rth_switch_JC;              % [K/W]
-inv.Rth_switch_CH = Rth_switch_CH;              % [K/W]
-inv.Rth_switch_JH = Rth_switch_JH;              % [K/W]
-inv.Lstray_module = Lstray_module;              % [H]
-inv.Irr = Irr;                                  % [A]
-inv.Csnubber = Csnubber;                        % [F]
-inv.Rsnubber = Rsnubber;                        % [Ohm]
-inv.Csnubber_zvs = 4.5e-9;                      % [F]
-inv.Rsnubber_zvs = 5e-3;                        % [Ohm]
+igbt.inv.Vth = Vth;                                  % [V]
+igbt.inv.Vce_sat = Vce_sat;                          % [V]
+igbt.inv.Rce_on = Rce_on;                            % [Ohm]
+igbt.inv.Vdon_diode = Vdon_diode;                    % [V]
+igbt.inv.Rdon_diode = Rdon_diode;                    % [Ohm]
+igbt.inv.Eon = Eon;                                  % [J] @ Tj = 125°C
+igbt.inv.Eoff = Eoff;                                % [J] @ Tj = 125°C
+igbt.inv.Erec = Erec;                                % [J] @ Tj = 125°C
+igbt.inv.Voff_sw_losses = Voff_sw_losses;            % [V]
+igbt.inv.Ion_sw_losses = Ion_sw_losses;              % [A]
+igbt.inv.JunctionTermalMass = JunctionTermalMass;    % [J/K]
+igbt.inv.Rtim = Rtim;                                % [K/W]
+igbt.inv.Rth_switch_JC = Rth_switch_JC;              % [K/W]
+igbt.inv.Rth_switch_CH = Rth_switch_CH;              % [K/W]
+igbt.inv.Rth_switch_JH = Rth_switch_JH;              % [K/W]
+igbt.inv.Lstray_module = Lstray_module;              % [H]
+igbt.inv.Irr = Irr;                                  % [A]
+igbt.inv.Csnubber = Csnubber;                        % [F]
+igbt.inv.Rsnubber = Rsnubber;                        % [Ohm]
+igbt.inv.Csnubber_zvs = 4.5e-9;                      % [F]
+igbt.inv.Rsnubber_zvs = 5e-3;                        % [Ohm]
 
-wolfspeed_CAB760M12HM3; % SiC Mosfet fpr 3L - NPC
-inv_mosfet.Vth = Vth;                                  % [V]
-inv_mosfet.Rds_on = Rds_on;                            % [Ohm]
-inv_mosfet.Vdon_diode = Vdon_diode;                    % [V]
-inv_mosfet.Vgamma = Vgamma;                            % [V]
-inv_mosfet.Rdon_diode = Rdon_diode;                    % [Ohm]
-inv_mosfet.Eon = Eon;                                  % [J] @ Tj = 125°C
-inv_mosfet.Eoff = Eoff;                                % [J] @ Tj = 125°C
-inv_mosfet.Eerr = Eerr;                                % [J] @ Tj = 125°C
-inv_mosfet.Voff_sw_losses = Voff_sw_losses;            % [V]
-inv_mosfet.Ion_sw_losses = Ion_sw_losses;              % [A]
-inv_mosfet.JunctionTermalMass = JunctionTermalMass;    % [J/K]
-inv_mosfet.Rtim = Rtim;                                % [K/W]
-inv_mosfet.Rth_mosfet_JC = Rth_mosfet_JC;              % [K/W]
-inv_mosfet.Rth_mosfet_CH = Rth_mosfet_CH;              % [K/W]
-inv_mosfet.Rth_mosfet_JH = Rth_mosfet_JH;              % [K/W]
-inv_mosfet.Lstray_module = Lstray_module;              % [H]
-inv_mosfet.Irr = Irr;                                  % [A]
-inv_mosfet.Csnubber = Csnubber;                        % [F]
-inv_mosfet.Rsnubber = Rsnubber;                        % [Ohm]
-inv_mosfet.Csnubber_zvs = 4.5e-9;                      % [F]
-inv_mosfet.Rsnubber_zvs = 5e-3;                        % [Ohm]
+% wolfspeed_CAB760M12HM3; % SiC Mosfet for 3L - NPC
+% inv_mosfet.Vth = Vth;                                  % [V]
+% inv_mosfet.Rds_on = Rds_on;                            % [Ohm]
+% inv_mosfet.Vdon_diode = Vdon_diode;                    % [V]
+% inv_mosfet.Vgamma = Vgamma;                            % [V]
+% inv_mosfet.Rdon_diode = Rdon_diode;                    % [Ohm]
+% inv_mosfet.Eon = Eon;                                  % [J] @ Tj = 125°C
+% inv_mosfet.Eoff = Eoff;                                % [J] @ Tj = 125°C
+% inv_mosfet.Eerr = Eerr;                                % [J] @ Tj = 125°C
+% inv_mosfet.Voff_sw_losses = Voff_sw_losses;            % [V]
+% inv_mosfet.Ion_sw_losses = Ion_sw_losses;              % [A]
+% inv_mosfet.JunctionTermalMass = JunctionTermalMass;    % [J/K]
+% inv_mosfet.Rtim = Rtim;                                % [K/W]
+% inv_mosfet.Rth_mosfet_JC = Rth_mosfet_JC;              % [K/W]
+% inv_mosfet.Rth_mosfet_CH = Rth_mosfet_CH;              % [K/W]
+% inv_mosfet.Rth_mosfet_JH = Rth_mosfet_JH;              % [K/W]
+% inv_mosfet.Lstray_module = Lstray_module;              % [H]
+% inv_mosfet.Irr = Irr;                                  % [A]
+% inv_mosfet.Csnubber = Csnubber;                        % [F]
+% inv_mosfet.Rsnubber = Rsnubber;                        % [Ohm]
+% inv_mosfet.Csnubber_zvs = 4.5e-9;                      % [F]
+% inv_mosfet.Rsnubber_zvs = 5e-3;                        % [Ohm]
 %[text] ## C-Caller Settings
 open_system(model);
 Simulink.importExternalCTypes(model,'Names',{'mavgflt_output_t'});
@@ -486,16 +488,16 @@ end
 %   data: {"dataType":"textualVariable","outputData":{"name":"fPWM_LLC","value":"       10800"}}
 %---
 %[output:6e4cc00d]
-%   data: {"dataType":"textualVariable","outputData":{"name":"Idc_FS","value":"   275"}}
+%   data: {"dataType":"textualVariable","outputData":{"name":"Idc_FS","value":"     4.583333333333334e+02"}}
 %---
 %[output:01f62bda]
-%   data: {"dataType":"textualVariable","outputData":{"name":"Vdc_FS","value":"        1875"}}
+%   data: {"dataType":"textualVariable","outputData":{"name":"Vdc_FS","value":"     9.375000000000000e+02"}}
 %---
 %[output:1f071822]
-%   data: {"dataType":"textualVariable","outputData":{"name":"Ls","value":"     1.775568181818182e-05"}}
+%   data: {"dataType":"textualVariable","outputData":{"name":"Ls","value":"     6.392045454545454e-06"}}
 %---
 %[output:231dc037]
-%   data: {"dataType":"textualVariable","outputData":{"name":"Cs","value":"     3.566505664210290e-06"}}
+%   data: {"dataType":"textualVariable","outputData":{"name":"Cs","value":"     9.906960178361916e-06"}}
 %---
 %[output:1bc16b1f]
 %   data: {"dataType":"textualVariable","outputData":{"name":"Vac_FS","value":"     5.633826408401311e+02"}}
