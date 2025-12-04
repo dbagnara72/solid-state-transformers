@@ -31,7 +31,7 @@ tPWM_DAB = 1/fPWM_DAB;
 half_phase_pulses = 1/fPWM_DAB/2;
 
 fPWM_LLC_pu = 0.54;
-fPWM_LLC = fPWM_LLC_pu*fPWM_DAB %[output:174c5e41]
+fPWM_LLC = fPWM_LLC_pu*fPWM_DAB
 
 TRGO_double_update = 0;
 if TRGO_double_update
@@ -65,8 +65,8 @@ Idab1_dc_nom = Pnom/Vdab1_dc_nom;
 Vdab2_dc_nom = 750;
 Idab2_dc_nom = Pnom/Vdab2_dc_nom;
 
-Idc_FS = max(Idab1_dc_nom,Idab2_dc_nom) * margin_factor %[output:6e4cc00d]
-Vdc_FS = max(Vdab1_dc_nom,Vdab2_dc_nom) * margin_factor %[output:01f62bda]
+Idc_FS = max(Idab1_dc_nom,Idab2_dc_nom) * margin_factor
+Vdc_FS = max(Vdab1_dc_nom,Vdab2_dc_nom) * margin_factor
 %[text] ### AFE simulation sampling time
 dead_time_DAB = 0;
 dead_time_AFE = 0;
@@ -103,8 +103,8 @@ RCFi_dc2_internal = 1e-3;
 %[text] #### Tank LC and HF-Transformer parameters
 % LLC
 fres = fPWM_DAB;
-Ls = (Vdab1_dc_nom^2/(2*pi*fres)/Pnom*pi/8) %[output:1f071822]
-Cs = 1/Ls/(2*pi*fres)^2 %[output:231dc037]
+Ls = (Vdab1_dc_nom^2/(2*pi*fres)/Pnom*pi/8)
+Cs = 1/Ls/(2*pi*fres)^2
 
 m1 = 12;
 m2 = 12;
@@ -164,8 +164,8 @@ ki_v_dab = 18;
 %%
 %[text] ### AFE current control parameters
 %[text] #### Resonant PI
-Vac_FS = V_phase_normalization_factor %[output:1bc16b1f]
-Iac_FS = I_phase_normalization_factor %[output:693b28a9]
+Vac_FS = V_phase_normalization_factor
+Iac_FS = I_phase_normalization_factor
 
 kp_rpi = 0.25;
 ki_rpi = 18;
@@ -206,7 +206,7 @@ polesrso_pll = [-1 -4]*omega_rso;
 Lrso_pll = acker(Arso',Crso',polesrso_pll)';
 Adrso_pll = eye(2) + Arso*ts_afe;
 polesdrso_pll = exp(ts_afe*polesrso_pll);
-Ldrso_pll = acker(Adrso_pll',Crso',polesdrso_pll)' %[output:26989b55]
+Ldrso_pll = acker(Adrso_pll',Crso',polesdrso_pll)'
 
 %[text] ### PLL DDSRF
 use_advanced_pll = 0;
@@ -219,13 +219,13 @@ ddsrf_fd = c2d(ddsrf_f,ts_afe);
 %%
 %[text] ### First Harmonic Tracker for Ugrid cleaning
 omega0 = 2*pi*f_grid;
-Afht = [0 1; -omega0^2 -0.05*omega0] % impianto nel continuo %[output:75c58cb8]
+Afht = [0 1; -omega0^2 -0.05*omega0] % impianto nel continuo
 Cfht = [1 0];
 poles_fht = [-1 -4]*omega0;
-Lfht = acker(Afht',Cfht',poles_fht)' % guadagni osservatore nel continuo %[output:6a06269e]
-Ad_fht = eye(2) + Afht*ts_afe % impianto nel discreto %[output:0c76ff32]
+Lfht = acker(Afht',Cfht',poles_fht)' % guadagni osservatore nel continuo
+Ad_fht = eye(2) + Afht*ts_afe % impianto nel discreto
 polesd_fht = exp(ts_afe*poles_fht);
-Ld_fht = Lfht*ts_afe % guadagni osservatore nel discreto %[output:1ba8c347]
+Ld_fht = Lfht*ts_afe % guadagni osservatore nel discreto
 %[text] ### 
 %%
 %[text] ### Reactive current control gains
@@ -327,7 +327,7 @@ Lrso = acker(Arso',Crso',polesrso)';
 
 Adrso = eye(2) + Arso*ts_inv;
 polesdrso = exp(ts_inv*polesrso);
-Ldrso = acker(Adrso',Crso',polesdrso)' %[output:16217f48]
+Ldrso = acker(Adrso',Crso',polesdrso)'
 
 freq_filter = f_grid;
 tau_f = 1/2/pi/freq_filter;
@@ -372,16 +372,16 @@ rKalman = 1;
 Zmodel = (0:1e-3:1);
 ocv_model = E_1*exp(-Zmodel*alpha) + E0 + E1*Zmodel + E2*Zmodel.^2 +...
     E3*Zmodel.^3 + Elog*log(1-Zmodel+ts_inv);
-figure;  %[output:28c3084b]
-plot(Zmodel,ocv_model,'LineWidth',2); %[output:28c3084b]
-xlabel('state of charge [p.u.]'); %[output:28c3084b]
-ylabel('open circuit voltage [V]'); %[output:28c3084b]
-title('open circuit voltage(state of charge)'); %[output:28c3084b]
-grid on %[output:28c3084b]
+figure; 
+plot(Zmodel,ocv_model,'LineWidth',2);
+xlabel('state of charge [p.u.]');
+ylabel('open circuit voltage [V]');
+title('open circuit voltage(state of charge)');
+grid on
 
 %[text] ## Power semiconductors modelization, IGBT, MOSFET,  and snubber data
 %[text] #### HeatSink settings
-heatsink_liquid_2kW; %[output:2330891c] %[output:55c0aace] %[output:6d4591c7]
+heatsink_liquid_2kW;
 %[text] #### DEVICES settings
 % danfoss_SKM1700MB20R4S2I4; % SiC-Mosfet full leg
 wolfspeed_CAB760M12HM3;
@@ -482,6 +482,7 @@ end
 
 %[appendix]{"version":"1.0"}
 %---
+<<<<<<< HEAD
 %[metadata:view]
 %   data: {"layout":"onright","rightPanelPercent":47.6}
 %---
@@ -536,3 +537,5 @@ end
 %[output:6d4591c7]
 %   data: {"dataType":"textualVariable","outputData":{"name":"Rth_mosfet_HA","value":"     7.500000000000000e-03"}}
 %---
+=======
+>>>>>>> ade84ff (set common operative working point on different SST architecture for performance comparison)
