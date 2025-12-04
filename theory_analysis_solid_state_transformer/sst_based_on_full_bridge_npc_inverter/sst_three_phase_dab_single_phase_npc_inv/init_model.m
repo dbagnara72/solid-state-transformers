@@ -15,18 +15,18 @@ model = 'sst_three_phase_dab_three_levels_inv';
 rpi_enable = 0;
 rpi_ccaller = 0;
 %[text] ### Settings voltage application
-application400 = 1;
+application400 = 0;
 application690 = 0;
-application480 = 0;
+application480 = 1;
 
 n_modules = 2;
 %[text] ## Settings and initialization
-fPWM = 2e3;
+fPWM = 4e3;
 fPWM_AFE = fPWM; % PWM frequency 
 tPWM_AFE = 1/fPWM_AFE;
 fPWM_INV = fPWM; % PWM frequency 
 tPWM_INV = 1/fPWM_INV;
-fPWM_DAB = fPWM*12; % PWM frequency 
+fPWM_DAB = fPWM*6; % PWM frequency 
 tPWM_DAB = 1/fPWM_DAB;
 half_phase_pulses = 1/fPWM_DAB/2;
 
@@ -98,9 +98,9 @@ CFi_dc2 = 900e-6*4;
 RCFi_dc2_internal = 1e-3;
 %[text] #### Tank LC and HF-Transformer parameters
 % three phase DAB
-Ls = (Vdab1_dc_nom^2/fPWM_DAB/Pnom/3) %[output:6e4cc00d]
+Ls = (Vdab1_dc_nom^2/fPWM_DAB/Pnom/3) %[output:0ce1dfb1]
 f0 = fPWM_DAB/5;
-Cs = 1/Ls/(2*pi*f0)^2 %[output:01f62bda]
+Cs = 1/Ls/(2*pi*f0)^2 %[output:8ab657aa]
 
 m1 = 12;
 m2 = 12;
@@ -160,8 +160,8 @@ ki_v_dab = 45;
 %%
 %[text] ### AFE current control parameters
 %[text] #### Resonant PI
-Vac_FS = V_phase_normalization_factor %[output:1bc16b1f]
-Iac_FS = I_phase_normalization_factor %[output:9a535e97]
+Vac_FS = V_phase_normalization_factor %[output:540d1256]
+Iac_FS = I_phase_normalization_factor %[output:96e25287]
 
 kp_rpi = 0.25;
 ki_rpi = 18;
@@ -202,7 +202,7 @@ polesrso_pll = [-1 -4]*omega_rso;
 Lrso_pll = acker(Arso',Crso',polesrso_pll)';
 Adrso_pll = eye(2) + Arso*ts_afe;
 polesdrso_pll = exp(ts_afe*polesrso_pll);
-Ldrso_pll = acker(Adrso_pll',Crso',polesdrso_pll)' %[output:26989b55]
+Ldrso_pll = acker(Adrso_pll',Crso',polesdrso_pll)' %[output:82e29d43]
 
 %[text] ### PLL DDSRF
 use_advanced_pll = 0;
@@ -215,13 +215,13 @@ ddsrf_fd = c2d(ddsrf_f,ts_afe);
 %%
 %[text] ### First Harmonic Tracker for Ugrid cleaning
 omega0 = 2*pi*50;
-Afht = [0 1; -omega0^2 -0.05*omega0] % impianto nel continuo %[output:75c58cb8]
+Afht = [0 1; -omega0^2 -0.05*omega0] % impianto nel continuo %[output:8d092f26]
 Cfht = [1 0];
 poles_fht = [-1 -4]*omega0;
-Lfht = acker(Afht',Cfht',poles_fht)' % guadagni osservatore nel continuo %[output:6a06269e]
-Ad_fht = eye(2) + Afht*ts_afe % impianto nel discreto %[output:0c76ff32]
+Lfht = acker(Afht',Cfht',poles_fht)' % guadagni osservatore nel continuo %[output:17f14063]
+Ad_fht = eye(2) + Afht*ts_afe % impianto nel discreto %[output:2cc3b7d6]
 polesd_fht = exp(ts_afe*poles_fht);
-Ld_fht = Lfht*ts_afe % guadagni osservatore nel discreto %[output:1ba8c347]
+Ld_fht = Lfht*ts_afe % guadagni osservatore nel discreto %[output:012657e6]
 %[text] ### 
 %%
 %[text] ### Reactive current control gains
@@ -314,7 +314,7 @@ Lrso = acker(Arso',Crso',polesrso)';
 
 Adrso = eye(2) + Arso*ts_inv;
 polesdrso = exp(ts_inv*polesrso);
-Ldrso = acker(Adrso',Crso',polesdrso)' %[output:16217f48]
+Ldrso = acker(Adrso',Crso',polesdrso)' %[output:78b0eed0]
 
 freq_filter = 50;
 tau_f = 1/2/pi/freq_filter;
@@ -359,18 +359,19 @@ rKalman = 1;
 Zmodel = (0:1e-3:1);
 ocv_model = E_1*exp(-Zmodel*alpha) + E0 + E1*Zmodel + E2*Zmodel.^2 +...
     E3*Zmodel.^3 + Elog*log(1-Zmodel+ts_inv);
-figure;  %[output:28c3084b]
-plot(Zmodel,ocv_model,'LineWidth',2); %[output:28c3084b]
-xlabel('state of charge [p.u.]'); %[output:28c3084b]
-ylabel('open circuit voltage [V]'); %[output:28c3084b]
-title('open circuit voltage(state of charge)'); %[output:28c3084b]
-grid on %[output:28c3084b]
+figure;  %[output:0b49bf74]
+plot(Zmodel,ocv_model,'LineWidth',2); %[output:0b49bf74]
+xlabel('state of charge [p.u.]'); %[output:0b49bf74]
+ylabel('open circuit voltage [V]'); %[output:0b49bf74]
+title('open circuit voltage(state of charge)'); %[output:0b49bf74]
+grid on %[output:0b49bf74]
 
 %[text] ## Power semiconductors modelization, IGBT, MOSFET,  and snubber data
 %[text] #### HeatSink settings
-heatsink_liquid_2kW; %[output:2330891c] %[output:55c0aace] %[output:6d4591c7]
+heatsink_liquid_2kW; %[output:178ec249] %[output:7b55c0ed] %[output:50dd316e]
 %[text] #### DEVICES settings
-danfoss_SKM1700MB20R4S2I4; % SiC-Mosfet full leg
+% danfoss_SKM1700MB20R4S2I4; % SiC-Mosfet full leg
+wolfspeed_CAB450M12XM3;
 dab_mosfet.Vth = Vth;                                  % [V]
 dab_mosfet.Rds_on = Rds_on;                            % [Ohm]
 dab_mosfet.Vdon_diode = Vdon_diode;                    % [V]
@@ -392,6 +393,9 @@ dab_mosfet.Csnubber = Csnubber;                        % [F]
 dab_mosfet.Rsnubber = Rsnubber;                        % [Ohm]
 dab_mosfet.Csnubber_zvs = 4.5e-9;                      % [F]
 dab_mosfet.Rsnubber_zvs = 5e-3;                        % [Ohm]
+dab_mosfet.Cgs = Cgs;                                  % [F]
+dab_mosfet.Cds = Cds;                                  % [F]
+dab_mosfet.Cgd = Cgd;                                  % [F]
 
 % danfoss_SKM1400MLI12BM7; % 3L-NPC Si-IGBT
 % inv.Vth = Vth;                                  % [V]
@@ -416,74 +420,75 @@ dab_mosfet.Rsnubber_zvs = 5e-3;                        % [Ohm]
 % inv.Csnubber_zvs = 4.5e-9;                      % [F]
 % inv.Rsnubber_zvs = 5e-3;                        % [Ohm]
 
-wolfspeed_CAB760M12HM3; % SiC Mosfet fpr 3L - NPC
-inv_mosfet.Vth = Vth;                                  % [V]
-inv_mosfet.Rds_on = Rds_on;                            % [Ohm]
-inv_mosfet.Vdon_diode = Vdon_diode;                    % [V]
-inv_mosfet.Vgamma = Vgamma;                            % [V]
-inv_mosfet.Rdon_diode = Rdon_diode;                    % [Ohm]
-inv_mosfet.Eon = Eon;                                  % [J] @ Tj = 125°C
-inv_mosfet.Eoff = Eoff;                                % [J] @ Tj = 125°C
-inv_mosfet.Eerr = Eerr;                                % [J] @ Tj = 125°C
-inv_mosfet.Voff_sw_losses = Voff_sw_losses;            % [V]
-inv_mosfet.Ion_sw_losses = Ion_sw_losses;              % [A]
-inv_mosfet.JunctionTermalMass = JunctionTermalMass;    % [J/K]
-inv_mosfet.Rtim = Rtim;                                % [K/W]
-inv_mosfet.Rth_mosfet_JC = Rth_mosfet_JC;              % [K/W]
-inv_mosfet.Rth_mosfet_CH = Rth_mosfet_CH;              % [K/W]
-inv_mosfet.Rth_mosfet_JH = Rth_mosfet_JH;              % [K/W]
-inv_mosfet.Lstray_module = Lstray_module;              % [H]
-inv_mosfet.Irr = Irr;                                  % [A]
-inv_mosfet.Csnubber = Csnubber;                        % [F]
-inv_mosfet.Rsnubber = Rsnubber;                        % [Ohm]
-inv_mosfet.Csnubber_zvs = 4.5e-9;                      % [F]
-inv_mosfet.Rsnubber_zvs = 5e-3;                        % [Ohm]
+wolfspeed_CAB760M12HM3; % SiC Mosfet fpr 3L - NPC (two in parallel modules)
+parallel_factor = 1.75;
+inv_mosfet.Vth = Vth;                                           % [V]
+inv_mosfet.Rds_on = Rds_on/parallel_factor;                     % [Ohm]
+inv_mosfet.Vdon_diode = Vdon_diode/parallel_factor;             % [V]
+inv_mosfet.Vgamma = Vgamma/parallel_factor;                     % [V]
+inv_mosfet.Rdon_diode = Rdon_diode/parallel_factor;             % [Ohm]
+inv_mosfet.Eon = Eon/parallel_factor;                           % [J] @ Tj = 125°C
+inv_mosfet.Eoff = Eoff/parallel_factor;                         % [J] @ Tj = 125°C
+inv_mosfet.Eerr = Eerr/parallel_factor;                         % [J] @ Tj = 125°C
+inv_mosfet.Voff_sw_losses = Voff_sw_losses;                     % [V]
+inv_mosfet.Ion_sw_losses = Ion_sw_losses;                       % [A]
+inv_mosfet.JunctionTermalMass = JunctionTermalMass;             % [J/K]
+inv_mosfet.Rtim = Rtim;                                         % [K/W]
+inv_mosfet.Rth_mosfet_JC = Rth_mosfet_JC/parallel_factor;       % [K/W]
+inv_mosfet.Rth_mosfet_CH = Rth_mosfet_CH/parallel_factor;       % [K/W]
+inv_mosfet.Rth_mosfet_JH = Rth_mosfet_JH/parallel_factor;       % [K/W]
+inv_mosfet.Lstray_module = Lstray_module/parallel_factor;       % [H]
+inv_mosfet.Irr = Irr/parallel_factor;                           % [A]
+inv_mosfet.Csnubber = Csnubber;                                 % [F]
+inv_mosfet.Rsnubber = Rsnubber;                                 % [Ohm]
+inv_mosfet.Csnubber_zvs = 4.5e-9;                               % [F]
+inv_mosfet.Rsnubber_zvs = 5e-3;                                 % [Ohm]
 
-danfoss_SKM1400MLI12BM7; % 3L-NPC Si-IGBT
-igbt.inv.Vth = Vth;                                  % [V]
-igbt.inv.Vce_sat = Vce_sat;                          % [V]
-igbt.inv.Rce_on = Rce_on;                            % [Ohm]
-igbt.inv.Vdon_diode = Vdon_diode;                    % [V]
-igbt.inv.Rdon_diode = Rdon_diode;                    % [Ohm]
-igbt.inv.Eon = Eon;                                  % [J] @ Tj = 125°C
-igbt.inv.Eoff = Eoff;                                % [J] @ Tj = 125°C
-igbt.inv.Erec = Erec;                                % [J] @ Tj = 125°C
-igbt.inv.Voff_sw_losses = Voff_sw_losses;            % [V]
-igbt.inv.Ion_sw_losses = Ion_sw_losses;              % [A]
-igbt.inv.JunctionTermalMass = JunctionTermalMass;    % [J/K]
-igbt.inv.Rtim = Rtim;                                % [K/W]
-igbt.inv.Rth_switch_JC = Rth_switch_JC;              % [K/W]
-igbt.inv.Rth_switch_CH = Rth_switch_CH;              % [K/W]
-igbt.inv.Rth_switch_JH = Rth_switch_JH;              % [K/W]
-igbt.inv.Lstray_module = Lstray_module;              % [H]
-igbt.inv.Irr = Irr;                                  % [A]
-igbt.inv.Csnubber = Csnubber;                        % [F]
-igbt.inv.Rsnubber = Rsnubber;                        % [Ohm]
-igbt.inv.Csnubber_zvs = 4.5e-9;                      % [F]
-igbt.inv.Rsnubber_zvs = 5e-3;                        % [Ohm]
-
-infineon_FF450R12KT4; % Si-IGBT
-igbt.dab.Vth = Vth;                                  % [V]
-igbt.dab.Vce_sat = Vce_sat;                          % [V]
-igbt.dab.Rce_on = Rce_on;                            % [Ohm]
-igbt.dab.Vdon_diode = Vdon_diode;                    % [V]
-igbt.dab.Rdon_diode = Rdon_diode;                    % [Ohm]
-igbt.dab.Eon = Eon;                                  % [J] @ Tj = 125°C
-igbt.dab.Eoff = Eoff;                                % [J] @ Tj = 125°C
-igbt.dab.Erec = Erec;                                % [J] @ Tj = 125°C
-igbt.dab.Voff_sw_losses = Voff_sw_losses;            % [V]
-igbt.dab.Ion_sw_losses = Ion_sw_losses;              % [A]
-igbt.dab.JunctionTermalMass = JunctionTermalMass;    % [J/K]
-igbt.dab.Rtim = Rtim;                                % [K/W]
-igbt.dab.Rth_switch_JC = Rth_switch_JC;              % [K/W]
-igbt.dab.Rth_switch_CH = Rth_switch_CH;              % [K/W]
-igbt.dab.Rth_switch_JH = Rth_switch_JH;              % [K/W]
-igbt.dab.Lstray_module = Lstray_module;              % [H]
-igbt.dab.Irr = Irr;                                  % [A]
-igbt.dab.Csnubber = Csnubber;                        % [F]
-igbt.dab.Rsnubber = Rsnubber;                        % [Ohm]
-igbt.dab.Csnubber_zvs = 4.5e-9;                      % [F]
-igbt.dab.Rsnubber_zvs = 5e-3;                        % [Ohm]
+% danfoss_SKM1400MLI12BM7; % 3L-NPC Si-IGBT
+% igbt.inv.Vth = Vth;                                  % [V]
+% igbt.inv.Vce_sat = Vce_sat;                          % [V]
+% igbt.inv.Rce_on = Rce_on;                            % [Ohm]
+% igbt.inv.Vdon_diode = Vdon_diode;                    % [V]
+% igbt.inv.Rdon_diode = Rdon_diode;                    % [Ohm]
+% igbt.inv.Eon = Eon;                                  % [J] @ Tj = 125°C
+% igbt.inv.Eoff = Eoff;                                % [J] @ Tj = 125°C
+% igbt.inv.Erec = Erec;                                % [J] @ Tj = 125°C
+% igbt.inv.Voff_sw_losses = Voff_sw_losses;            % [V]
+% igbt.inv.Ion_sw_losses = Ion_sw_losses;              % [A]
+% igbt.inv.JunctionTermalMass = JunctionTermalMass;    % [J/K]
+% igbt.inv.Rtim = Rtim;                                % [K/W]
+% igbt.inv.Rth_switch_JC = Rth_switch_JC;              % [K/W]
+% igbt.inv.Rth_switch_CH = Rth_switch_CH;              % [K/W]
+% igbt.inv.Rth_switch_JH = Rth_switch_JH;              % [K/W]
+% igbt.inv.Lstray_module = Lstray_module;              % [H]
+% igbt.inv.Irr = Irr;                                  % [A]
+% igbt.inv.Csnubber = Csnubber;                        % [F]
+% igbt.inv.Rsnubber = Rsnubber;                        % [Ohm]
+% igbt.inv.Csnubber_zvs = 4.5e-9;                      % [F]
+% igbt.inv.Rsnubber_zvs = 5e-3;                        % [Ohm]
+% 
+% infineon_FF450R12KT4; % Si-IGBT
+% igbt.dab.Vth = Vth;                                  % [V]
+% igbt.dab.Vce_sat = Vce_sat;                          % [V]
+% igbt.dab.Rce_on = Rce_on;                            % [Ohm]
+% igbt.dab.Vdon_diode = Vdon_diode;                    % [V]
+% igbt.dab.Rdon_diode = Rdon_diode;                    % [Ohm]
+% igbt.dab.Eon = Eon;                                  % [J] @ Tj = 125°C
+% igbt.dab.Eoff = Eoff;                                % [J] @ Tj = 125°C
+% igbt.dab.Erec = Erec;                                % [J] @ Tj = 125°C
+% igbt.dab.Voff_sw_losses = Voff_sw_losses;            % [V]
+% igbt.dab.Ion_sw_losses = Ion_sw_losses;              % [A]
+% igbt.dab.JunctionTermalMass = JunctionTermalMass;    % [J/K]
+% igbt.dab.Rtim = Rtim;                                % [K/W]
+% igbt.dab.Rth_switch_JC = Rth_switch_JC;              % [K/W]
+% igbt.dab.Rth_switch_CH = Rth_switch_CH;              % [K/W]
+% igbt.dab.Rth_switch_JH = Rth_switch_JH;              % [K/W]
+% igbt.dab.Lstray_module = Lstray_module;              % [H]
+% igbt.dab.Irr = Irr;                                  % [A]
+% igbt.dab.Csnubber = Csnubber;                        % [F]
+% igbt.dab.Rsnubber = Rsnubber;                        % [Ohm]
+% igbt.dab.Csnubber_zvs = 4.5e-9;                      % [F]
+% igbt.dab.Rsnubber_zvs = 5e-3;                        % [Ohm]
 %[text] ## C-Caller Settings
 open_system(model);
 Simulink.importExternalCTypes(model,'Names',{'mavgflt_output_t'});
@@ -516,50 +521,50 @@ end
 %   data: {"layout":"onright","rightPanelPercent":36.1}
 %---
 %[output:1dd96712]
-%   data: {"dataType":"textualVariable","outputData":{"name":"Idc_FS","value":"     4.583333333333334e+02"}}
+%   data: {"dataType":"textualVariable","outputData":{"name":"Idc_FS","value":"458.3333"}}
 %---
 %[output:174c5e41]
-%   data: {"dataType":"textualVariable","outputData":{"name":"Vdc_FS","value":"     9.375000000000000e+02"}}
+%   data: {"dataType":"textualVariable","outputData":{"name":"Vdc_FS","value":"937.5000"}}
 %---
-%[output:6e4cc00d]
-%   data: {"dataType":"textualVariable","outputData":{"name":"Ls","value":"     2.840909090909091e-05"}}
+%[output:0ce1dfb1]
+%   data: {"dataType":"textualVariable","outputData":{"name":"Ls","value":"2.8409e-05"}}
 %---
-%[output:01f62bda]
-%   data: {"dataType":"textualVariable","outputData":{"name":"Cs","value":"     3.869906319672623e-05"}}
+%[output:8ab657aa]
+%   data: {"dataType":"textualVariable","outputData":{"name":"Cs","value":"3.8699e-05"}}
 %---
-%[output:1bc16b1f]
-%   data: {"dataType":"textualVariable","outputData":{"name":"Vac_FS","value":"     3.265986323710904e+02"}}
+%[output:540d1256]
+%   data: {"dataType":"textualVariable","outputData":{"name":"Vac_FS","value":"391.9184"}}
 %---
-%[output:9a535e97]
-%   data: {"dataType":"textualVariable","outputData":{"name":"Iac_FS","value":"     5.091168824543142e+02"}}
+%[output:96e25287]
+%   data: {"dataType":"textualVariable","outputData":{"name":"Iac_FS","value":"509.1169"}}
 %---
-%[output:26989b55]
-%   data: {"dataType":"matrix","outputData":{"columns":1,"exponent":"2","name":"Ldrso_pll","rows":2,"type":"double","value":[["0.006118759097557"],["1.356280750433189"]]}}
+%[output:82e29d43]
+%   data: {"dataType":"matrix","outputData":{"columns":1,"name":"Ldrso_pll","rows":2,"type":"double","value":[["0.3451"],["81.4559"]]}}
 %---
-%[output:75c58cb8]
-%   data: {"dataType":"matrix","outputData":{"columns":2,"exponent":"4","name":"Afht","rows":2,"type":"double","value":[["0","0.000100000000000"],["-9.869604401089358","-0.001570796326795"]]}}
+%[output:8d092f26]
+%   data: {"dataType":"matrix","outputData":{"columns":2,"exponent":"4","name":"Afht","rows":2,"type":"double","value":[["0","0.0001"],["-9.8696","-0.0016"]]}}
 %---
-%[output:6a06269e]
-%   data: {"dataType":"matrix","outputData":{"columns":1,"exponent":"5","name":"Lfht","rows":2,"type":"double","value":[["0.015550883635269"],["2.716608611399846"]]}}
+%[output:17f14063]
+%   data: {"dataType":"matrix","outputData":{"columns":1,"exponent":"5","name":"Lfht","rows":2,"type":"double","value":[["0.0156"],["2.7166"]]}}
 %---
-%[output:0c76ff32]
-%   data: {"dataType":"matrix","outputData":{"columns":2,"name":"Ad_fht","rows":2,"type":"double","value":[["1.000000000000000","0.000500000000000"],["-49.348022005446794","0.992146018366026"]]}}
+%[output:2cc3b7d6]
+%   data: {"dataType":"matrix","outputData":{"columns":2,"name":"Ad_fht","rows":2,"type":"double","value":[["1.0000","0.0003"],["-24.6740","0.9961"]]}}
 %---
-%[output:1ba8c347]
-%   data: {"dataType":"matrix","outputData":{"columns":1,"exponent":"2","name":"Ld_fht","rows":2,"type":"double","value":[["0.007775441817635"],["1.358304305699923"]]}}
+%[output:012657e6]
+%   data: {"dataType":"matrix","outputData":{"columns":1,"name":"Ld_fht","rows":2,"type":"double","value":[["0.3888"],["67.9152"]]}}
 %---
-%[output:16217f48]
-%   data: {"dataType":"matrix","outputData":{"columns":1,"name":"Ldrso","rows":2,"type":"double","value":[["0.176291574541956"],["8.991511697631793"]]}}
+%[output:78b0eed0]
+%   data: {"dataType":"matrix","outputData":{"columns":1,"name":"Ldrso","rows":2,"type":"double","value":[["0.0911"],["4.7089"]]}}
 %---
-%[output:28c3084b]
-%   data: {"dataType":"image","outputData":{"dataUri":"data:image\/png;base64,iVBORw0KGgoAAAANSUhEUgAAATUAAAC6CAYAAADPjtq9AAAAAXNSR0IArs4c6QAAIABJREFUeF7tXQ2QV9V1P6RJxo0Jg4tEgpsFJIsxNUG0sStCMNmxTI1CJqaF3UzKADF0gpg27Cy7xBljlK8VM36gCY3bHTOVxXaCYTe2QQejrUFqokI0sQGBdSWLBpcQSMSmiXTOg\/P37t337rv3vfvevXc5\/xlH4H8\/zv3dc37\/c+7HuSNOnDhxAvjDCDACjMAwQWAEk9owmUkeBiPACEQIMKmxIjACjMCwQoBJrYTp3LNnDyxYsACuueYaWL58ufUeDx8+DIsWLYLa2lpYs2YNVFVVWe9DbHDt2rXQ09MDnZ2dUFdXV2hfcuPHjx+H1tZWGDduXCFYFjmYHTt2QFNTU9TF4sWLjeR3ibmMCenbvHnzYO7cuUVClqltJrVMsJlVckFq2OfWrVvh+uuvNxNWo7RsYEX2JYtDxLBx40aor69PldZUtgcffBDGjx+v1XZq50IBIuO+vj7o6OiA6upqk+rgE6mh4CgPzkWWsRgNPENhJrUMoPlepWgSFQ0MsSjSC5WxNjEmUxyQ0Nra2kCXME30YLiRmumPiwlWecsGT2qo5Bs2bIhwwJBEDInI+K644opIUfGzevXqQS6zWB\/DQwrfyCCw7rFjx6JwS25fBp+Mgv6djEM2LiqHIQjKTqEIlevv7x8UosjhJX6JIRj96uPfKfxsaWmJvLNdu3ZFbUyZMmXQrykZF34nj1UMj3VwvfPOO+HWW28d0hfJEycD9Y944ocwEOdFDNNEzAkH9NAojKd\/k\/tKkiHp33fv3l0JDUku7CNJljjDk2UhfaL5ojHj3+OIM6k+LieQLo8ZM6aCt4iZjKuIG+nVJZdcEukMftDDEsc8c+bM6N+PHDlS0RdZH0WZTX8w8hKVSf2gSU12yeVfWjJMmvy472ltaPTo0RExkMHQpKESoQIMDAwoPRJV27I3I5IaGaesJGRMKPuVV145aM1MRWpIVAcOHDCSFeW5++67Kz8IOrgSbvLYZNKUZRFxQsJFcsa2aI7EceN6jeiZ0RwsXbq08sMU9z2Rs4ypiWyoBypZ5PAx7YcHiUn8IUqrL+Mm67I8RyIO4o+cqA+ky9i3LC\/+KOB6H\/0Iyvou60jZ67inBampfrWJmOLWfihUuu6664YsrqsMRDWJaaFFkqcm\/vKpQp80g0lS4qSNCVGeG264ITI28txwLCK547\/LWOuEn7LXgR4Z9SWuK8URh7gJIYY5KAsanuihiB6l7P0keRNxsuGPi+qHCTdEVCFX3HfivxGBJ62pyTjIRpz2Q4PlZW+NPMW4Hzm5P1mHH3300UGhOGFJPyhpOm9CQrbLBuupxSmsbPx33XXXoF068Xs5TCNgyW2XPRAVqaX9aumQmmoh2Dap4diIwNGYm5ubgZTVFNckT428r4svvrjiNcb9kMSRGi0niMqORIYL+DKpySES1iHSS\/LU4mRLIrUkWeRdv7gfJXFss2fPVnpqaet5aaRG5I4\/HjLOcaQm95dEajLh0FIJk5ptKo7xHtI8CvylFZU8zsBEMWWDGE6eGo6TDG7GjBmwd+\/eSuhp6gHLpCbjFucVmnhq4pykeTNkqEk\/TCrZdDw1lRq79NQmT548KOogb5uO+Njw1OSxM6kVQGrkbYihStKaGv266KypJSlCmjcmty2uQSStqakWXkV3X\/6Vp\/UOWiORw8+4EFKeAjEEk89M6XgFaWuRuCiN6znoLYubIVnW1OT1O1UIFLe2JK+TJskmE1NaaCximuZNm66pyXOomhMiNZQH138pdFSFn1nW1MSd4TR7KMjktZoNNvyk0ens0uEa0S233BJVUe1+ijuFJp4ayWK6+5m0BiTvfoqeFf4ZQzDckY3b\/aQdTcJFtWNLZeJ24nRwpZ1mua9nn302Wo\/BD+2qjRw5MiI5\/NDmAMpGc5O0+4nlSb44L1K160c\/fEiqhINKNiISXDQnQqAFdJpj1XEP1e6ljmejs\/tJmMs\/ouIuLeox\/jiTfiRtcol1ZJ3CzQQ5tBfniHc\/tfjVfiHVOpX93rjFLAiYnncyOaeWRZ7TtU7cUR\/TcNsX7IL31FRAMqn5omZvyxF3zEY8TpImMZIgbmy4uKKVJltI38tHllB2edc7zbb4RoGDGWdScwB6SpdyiCWGlzrShnz3U2d8ZZaRl0vEw+cqOfjuZ5mzxH0xAozAaY\/AsA4\/T\/vZZQAYgdMQAe9J7bzzzjsNp4WHzAiEjcAfai+HNy5eCIe\/+cnSB1Ihtbi1jjRpcOv4oYceSiuW63sktX379uVqw1XlkGVHzFh+V5pzst+Q8e\/6yauwpOtF96S2bNkyWLFihVbiP9w9WbVqVbQLlfeDC\/r4iUugGPLEhix76EbF8ue1ynz1127thbVb97sltXxDyF6bziklZQINmRj2798PEydOzA6O45osv9sJCBl\/L0jNxbUH7PPmm2+ONCcpPTOTmjvDCtmoEDWW353u3PVYH3z9B3vde2ryuRX5SpFtiDDsnDBhAvT29g7L8JONyrbGmLXH+JvhZbP07Huegyf3HnFPauKgxLt\/cvZUG4PHNbn7778fvva1r0WXnlVravjdtm3bbHRbahuYHaGmpqbUPm12xvLbRNO8rVDxb2hogN9Nb4E\/nn2+X6RGU5CUUM98it6ugafCV65cCfPnz482JYbrRgF7Cnm0JH9dxj8\/hllbqP7qj6KqTo906AhPO56333678Ws4Yvtxif3w+7jNAl5T05mZYsowKRSDq26rIePvNamp0qHoTk5aOfbU0hBy833IRoWIsfxu9ObJl47A7Huf88tTkz2ptFeU8kLHpJYXwWLqMykUg6tuq6HiT5sE73jjdXj923+jO1xr5ZQ3Cop4\/9BUcg4\/TRGzVz5UoyIEWH57uqDbUt\/hN+GiW5+Kir\/rtZ\/Baw98RbeqtXJDSE18U9FaLzkaYlLLAV7OqkwKOQHMWT00\/JHQru96MTrKgZ9R31\/k5IrjIFJzdU1KNfdMajktI0f10IxKHirLn2PyM1R9+PlD8IXOF6Ka0z80Cl5Yd617UsPMl\/TStc6Y+EK7GiU2Kh0tKq4M418ctnLL4uZAbfUZsPPGy5xdyA8i9VCoWTrYqMozqrieGP\/i8ceQc\/Nzv4ZvPLw36gwJrfvLU6P\/u4qymNQKnHc2qgLB1Wia8dcAKUcRJDQ8uoH\/J0JbP++CKPTED5NaAriugMkx15WqbFQ2UMzeBuOfHTtVTXlDgAgNQ07x48p22VMrZt6jVtmoCgRXo2nGXwMkgyJxZIbVH7zuY3DlBaOHtMSkxp6agXqVU5RJoRyck3rxBX9xE0CUVVw\/ixsDkxqTmlsLiundF6PKCgzLnxU5gJ++fBS+8YO9lTNnYkuNHx8Ly2dNjDYDVB8mNSa17BpYUE0mhYKA1Wy2bPzxTQF8WyDugwQmbgLoDME7UqNHY3t6egAfOV24cCHccccdkDdDhw4YYhlXwJjKGVe+bKW0IbPYBstvG1Gz9orEH9fH7nm8D148+PtYbwwlRSL74uXnwvWfrDUT\/FRpV7Ybu1FAhDZt2jQYP348dHV1wZo1a6C7uxu2b98e\/bmqqirTQE0ruQLGVE4mNRuI2W2jSFKwK2l8azblT1rkl3tGItv0xY\/Bh8eemXuIrmw3ltQw3RBdmRoYGKiQGmbixBekyvTWXAGTe0Z599MGhLnasEkKuQTJWDmr\/Ehg7Y\/0Qt\/A8UQvjERCErt26jkw\/7JxqWtkpsNwZbuJRzowHVB\/fz\/MmTMHtmzZEoWfS5YsiULRuKfsTAesW94VMLryqcplVUobfdtog+W3gWL2NtLwR\/I6cvyPcOP396SSF4WT+P+vXz0JLq4daZ3E5JG6sl3lOTV6vo6ELfohlrjpdwVMdlV8u2aaUtroo8g2WP4i0U1vm\/BH8joBAO1b98Mrh9\/UIjAisU9\/dAwsnlFTOIH5ZLt8+DZdtzKXYFLIDJ2ViqHhj+T18sBxuA1Dx9+8Wbl+lAYGHa343MXnwI1XnZdWvLTvXTkkTGoFTnFoRiVDwfIXoxwv45qXoddFkiCBXT5pFLTMmggjTu1QFiNl\/la9IjX5XYK44RWd4pv6dAVM\/inla1I2MMzThitSjsLFEwDtj5iFiyJx4Z+nnPNOuOXaj0b\/nHbQNQ9ORdV1ZbvKjQJ8aHju3LmVMeNjx\/jwMG4U4J\/xeMedd95ZFCZRu66AsTEoV0ZlQ3Zsg+WPR5KyUvx47xHoevqgUagotohEVXvWGTDnovdHdydl4godf1e2m3qkA9\/lpI\/4RB4e9cDjHZ2dnbZsKLYdV8DYGFToSnm6yk+k9bMDx+Cf\/utApAqUotpUL4i4rv7YGPjSjJponUzX6wodf1e2q\/TUNmzYAPT4Cu2E0tuc7Kmlq3foSjlc5SfSeqbvKHT++Fe5SQsbGF9dBf\/QUAuTxrxHm7TSNCh0\/L0jNQRcfCpPXEOz9ahx2qRy+KmDUHFlQjUqJK0\/vXUCvvnvv4CXj70jc3gormVhmPiJyWfB314ytrQ1rlDxJ430ktSKMxf9ll0Boy9hcsnQldJH+Sl8a9\/aC0++9JtcXpZMWpdNGgWfv\/QDpZFWmo75iH+azOL3rmyXj3SYzJJh2dCVsmz5KSx85MUB6N7569yEJZIWHoO46sIx8OmPnm20rmU45VaLl42\/VeEdbvIlkpp8m4AGjC9IdXR0QHV1tW0MYttzxfY2Bhe6UtqSn8iq5qwzYMX398Av+n9nlbAwNMRrPwsvP3eQl2VLfhu6kKWN0OV3ZbuJu5\/4XN7SpUvhscceg\/nz50NNTQ20trYCZu4Qj3lkmSyTOq6AMZExqWzoSpkmP5EVjv+Xr\/0een52CHpfP55rDYuwpB1CJKzzx54JKz9TB6\/+9n+NFuHT5Lcxx0W2Ebr8rmw39UjH5s2bgc6rlblBQMriChgbyhqyUiJhvfLKK3BuTQ386zOvwZN78q9fxRHWRR98Hyy6vAZGjDh5wNTkyEPaHIWMP44tdPld2a4ynxrueM6cOROamprgvvvui7J19PX1cfiZZk2nvvdRKYk08P\/f3dEPT+\/\/bSStyV1D1fDJw8I1rPrzRsEX\/vIDVolKE\/qomI\/4n07ye0VqBPz69eth1qxZgAdtkdgw7VCZCSJRDlfAmCif6\/BTDANRlodfOAT\/8fzrhZAVhoOTzzkTrptxLlS9688qa1g2PSwb2DOp2UIxezuubJd3P7PPWWpNG54CERamnnn4+UPwwxeKJas5U8bA+NFVUShoQ\/5UkAoswPIXCK5G00xqCSC5AkZjzlKLqIyKPJuXfv0GfOs\/X4E9r70RtZf1Oo4sjLjQ\/sHqMwDzal047r0VzypVeA7fdCAqtEzopOzKdlM3CpLufiYd6RBvIaiOf4jlUDOSyroCJo+2knf13cd\/CU8ffKswskKPCj0rDAfxo3unUHdsoRsVy68708WUc2W7g0hNJpq4oarW1fDBlpUrV0ZHQJAM6X5o3DocnoOjB11Uj7i4AkY1zUhax\/\/vLbjrsZeNMpGq2hQ9qz8\/973wuannwJj3vds6UZmoL5OCCVr2y4aOvyvbNfLUTKdNdQRETGOkatcVMCgTktdrR\/8Atzwc\/6irDh4iWaFntfDycTD6zHcX4lnpyGNSJnSjYvlNZtt+WVe2W+hGgcpTw4ddMAsIfSgbiAxtmcAgiT3w9EF4au8R7bUtSi0zeeyZcP0VH4R3jBhROW\/1p98ehIkTJ9rXlpJaZFIoCeiEbkLHv0zbFSGskJpOtlvV2pfYqNhWHFmJ74ri7QQMRZubm6PcbOIaHraJwOBn27ZthWnYqh8NwPdeOJbY\/riR74y+u+r8M2HOR94H9Pc0gfBJQbyJEeqH5Xc7c6Hi39DQUAFu3759pYNYqKdG5IaZcuvr6xMHJ5OcWLAotlc97ore17y\/GAtNl34g15pW6L+0LH\/p9jiow9DxL8p202alUFJTkZUoGJVrbGwcQn62gUkiMySy7i9PzUViMtihKyXLn2Y+xX4fOv62bVcXbSWp4ZpYW1tbpa20dz\/Fl90xjMSNgpaWFmhvbx8UVsrlMPzENba47B82gXnypSMw+97nKuNBIvtE3VnQfOUEq2RGHYSulCy\/rhkVUy50\/G3argnCynTeSDZENBRKYhipeqFdPhZCa2pxhLdgwYLoFXjVy1Q2gEHvbNNPX4U1P9w\/iNBse2bsqZmoXvFlQyeF0OW3YbtZtMToSEeIWTrkcLOIMDMJ+NCVkuXPYlL26oSOv1ekhtOC4WAWT83elJ5sKQ8wcYS288bLbIuY2F7oSsnyl6YqsR2Fjn8e282DvNU1tTyCJNXNA8y9T7wCN255KWq6TA+N19SK0ATzNkMnhdDlz2O75rP9do1Cdz\/zCEZ1swKDXtpFtz7ljNCw49CVkuW3ocHZ2wgd\/6y2mx2xkzWHLalVf\/VHTgmNSS2vauavHzophC4\/k1qCDmcBZvY9z1WuOd3TeAE0fvzkW41lf0JXSpa\/bI0Z3F\/o+GexXRuIKx9eqa2tLT3TrTwoU2C6fvIqLOl6MWpm+qRR0L1kqg2cMrURulKy\/Jmm3Vql0PE3tV1bwCWGn3FpiNIO39oSSmzHBBhcR8PDtZSAcf28C2D6h0YVIZZWm6ErJcuvNc2FFQodfxPbtQmi0Zoa3jDYtGmTtw+viJsDaz9bB9dNd3uZPHSlZPltmpp5W6Hj7x2pxXlqqpP\/5lOmV0MXGPFMmovjG3GjCV0pWX49HS2qVOj469qubfyUa2rYWZmvsccNThcY8V7nbddOhkWnXuu2DZhJe6ErJctvMtv2y4aOv67t2kbOKPy03blOe7rA0I6nL14aji10pWT5dTS0uDKh469ru7YRHBakJq6lud7xFCcodKVk+W2bm1l7oePPpJYw3zrA\/Mt\/H4QbHvyfqAW822n7VSUzVXy7dOhKyfJnnXk79ULHX8d27SA1uJXgPTX5GEeZF9bTJiR0pWT502a42O9Dx98rUpNzn9HU+Zh6SNwguO8LH4HPTj2nWE0zaD10pWT5DSa7gKKh4+8FqeV997OAeU1NPXTbI72w+lTyR0z66PKwrTz+0JWS5S9Co\/XbDB1\/L0iN4E7y1PSnw17JNGAwEwfdIPAp9OTdT3s6kLWl0EkhdPnTbDfrvKbVC3pNTQw9v\/KpWrjp6klp4y31+9CVkuUvVV2GdBY6\/s5Jjd4gOHToEKxbty7KfLtr164hQE+ZMqXUA7kqYMTL676FnuypuSUExt89\/s5JzT0E8RKogBEP3PoWerJRudeo0D2d0OVnUkuwARUwlAjSpwO34jBCV0qW3y0xh46\/V6RGoajP4ad4i8DH0JM9NbeEwPi7x98rUkuCA9fZZs6cOeQV9SLhSwLmgacPwtJNJ28RMKkVMwOhewosfzF6odtqEKTm0+Fb39fT2FPQVf3iyjGpFYetTstBkJpPSSJ9X09jUtNR+2LLMKkVi29a616RmmpNbePGjc7DT\/F8mq+hJ5NamsoX\/z2TWvEYq3rwitTcQjG49zhg1m7thbVb90cFfcrKIePGRuVWkxh\/t\/h7R2ryVSkMPbdv317661JxwHz22zvh8d2\/iWbs8Dc\/6XbmFL2zUbmdGsbfLf5ekdrx48ehtbUVpk2bBnPnzq0gg8TW29sLy5cvLw2tOGB8vu8pAsNGVZqaxHbE+LvF3ytS8zn1kK9ZbuPUh43KrVEx\/m7x94rUyFNrbGwctCmwY8eO6E5omY+xyMCIpLZ81kRYPmuC25nj8JPxLwiB0EnZK1LDOcJQs62tDWi3EwmtqakJbD1oLOZuU12Sl4ERNwl83vnk3c+CLN2g2dBJIXT5vSM11B05aaSt4xzoCa5cuRLmz58PdXV1EYEmbULIwNChW983CZjUDNinoKKhk0Lo8ntJagXp2pBmVTcVkkgNH1fxMTMHbxSUpTXp\/YROCqHL7xWplZ351sRTC+EmAZlb6ErJ8qcTZ5ElQsffK1LDicINgQkTJgw60mF7AsWbC0mhrQhMSJsEHH7a1hbz9kInhdDl94rUyk49RP3h+bf6+vpB2ovA4Gfbtm3wzK\/ehC9tfjX6e8\/8Ghg38p3mml5ijQMHDkBNTU2JPdrtiuW3i6dpa6Hi39DQUBnqvn37TIedu7wXbxQkHfbF0YlsH8qdTw4\/c+ullQZC93RCl98rT82KRikakdfscKOgpaUF2tvbo91Q8SMCE9LOJ4efRWtRevuhk0Lo8jsntbIfXtE9LhJHaiHsfDKppZNO0SVCJ4XQ5XdOakUrWNb2RWBC2vlkUss64\/bqhU4KocvvHan5lqUjtJ1PJjV75JS1pdBJIXT5vSI1H7N0iJsE9zReAI0fH5tV10urF7pSsvylqUpsR6Hj7xWp+Zilw\/eHi+O0MnSlZPmZ1PIg4BWp+ZilQyQ1n7PdikrApJDHJPLXZfzzY5inBa9IDQdSdJYOXbAImNCOc\/Camu4MF1eOSa04bHVa9o7UUGjdYxc6A8xaRia1UI5zMKllnXF79ZjU7GGZpSUvSS3LQGzXIWBCO87BpGZbE8zbY1Izx8xmDSa1BDQRmMd\/+gvAdwnwg7ueuPsZwoeNyu0sMf5u8WdS0yQ131N4i8Ngo3JrVIy\/W\/yZ1BSk9t1HnoXZ9z4XlQjljBqHn24NivF3jz+Tmiap+f4uAXtq7o2JJGBPze1cMKkpSG3xtx4L4kV2eQhsVG6NivF3i793pEavR8mwqF5+KgJCBObCZd+DJ\/ceiZr3+UV2JrUiNCB7m0xq2bGzUdMrUqM0RPPmzSs0nbcOcCKphXRGjdd0dGa32DJMasXim9a6d6S2bNkyWLFixZCkjWkDsf09AjNy4QOAWTqmTxoF3Uum2u6isPbYqAqDVqthxl8LpsIKeUVqOEq8JtXb2wv4boDLz4QLL4Wjf7U2EoFJrdyZYFIoF+\/htnzhFamV\/fCKSnUQmCOf6YiKhHRGjcNPt4TA+LvH3ytScw\/H2xLUXvrX8LvpLUxqDiaFPTUHoAtdho4\/k1qC\/oikFtIZNfYU3BIC4+8ef+9IjXKq9fT0wDXXXAMLFy6EO+64A26\/\/Xaorq4uDbFxV\/0jvPnh2VF\/oeRRI3BC\/6Vl+UtT89iOQsffK1IT03mPHz8eurq6YM2aNdDd3Q3bt2+P\/lxVVVXKjDOplQLzsDSq0EkhdPm9IjUxnffAwECF1PDF6FWrVpXqrb3\/774Nfzz7\/MjoQjp4y+GPOzJmT9k99iiBV6SGAq1duxb6+\/thzpw5sGXLlij8XLJkSRSKlnnMg0gttIO3TGruDSt0Tyd0+b0jNVRJ+arU6tWrS79hcPbf\/xu89Z6zgUmtfJII3ahY\/vJ1RuzRS1JzC8nJ3kPMeMvhjw+aA8Ck5nYemNQS8CdSCynjLZOaW2Ni\/P3An0kthdRCO6PGa2ruDYs9Nbdz4B2piefUCJrFixeXukkghp+hXZFiUnNrUIy\/e\/y9IjUitHHjxlVIjP4NoSrznBqFn+ypla+k7OmUj7nYY+j4e0Vq4jm1urq6Cs74DmjZ59SY1NwZVuhGxfK70x3s2StSQ4HwOAfdJKDbA3h2bcKECaUe6yBSC+2KFIc\/bg2K8XePv1ekpko9JEKFqb0feuihQejJZ9s2btwI9fX1QxCWX39PShNOpBbabQI2KvdGxZ6a2znwitSyQoFkePPNN8NNN90UXXpHgkPvrqOjY8gl+DhPMK5fJLUQD94yqWXVInv1mNTsYZmlpWFBavLAyePDa1Wyt6abWZdJLYs62anDpGAHx6ythI6\/l6SGxNPW1laZE9NrUhhitrS0QHt7+5C3DtCD27BhQ6XtpDAVSS20NN40qNCVkuXPSkd26oWOv3ekhqSDISKFjuR1ocelc6FdTF80d+7cQbMsf4f9NDc3Q2dn5xDyY1KzYyBZWgndqFj+LLNur45XpJb3SEfcOTcVVCoCRFJ7d9+P4anbPm8P7ZJawlRNNTU1JfVmvxuW3z6mJi2Gin9DQ0NlmPv27TMZspWyI06cOHEirqWsnpqKoJIkpjqNjY1D1t6Q1EK8TcAbBVb0M1cj7Knlgi93Za88NRqN6ZqaLqHJnqBqlzRkUnM1qbm18VQDLL8tJLO1w\/hnwy3RU8vSnHz2jNrATYDJkyeD+ECyWBavY8Wtp2F9JLX3PPvPUQjKH0aAEQgLAa\/Cz7CgY2kZAUaAETiJgFVPjUFlBBgBRsA1AkxqrmeA+2cEGAGrCDCpWYWTG2MEGAHXCDCpuZ4B7p8RYASsIsCkZhVObowRYARcI+AtqYlHPlykETeZGB1Z5fTo+H5qmRmEVePRkV+sr7rTa4KbrbK68ovlklJd2ZLJpB1d+cW0Xr7bBI3fRQ5GL0lNzO6Bytfa2grTpk0rNTmlrlLqyooHmfGD92B1DynrypCnnK781AfJ\/swzzySeLcwjj2ldXfnljDG6WWJM5TEtryu\/+EOCV+98tgmR0DBphWkiDFMM5fJekpqcNhwVcPv27d54NrLXIqY415VVt1zeCU6rb4o1yv3888\/Dz3\/+89jsK2n92f5eV370cp544gmtZAy2ZUzzknX0R751gx4QfnSSS5Q5HuxLvPuNfy87W7aXpCYnkFRdoyp7wuT+ssrqi1KayE8EgqEPyh+XUqrs+dCVH8n40KFDsG3bNti1axf4En7qyq\/r0ZWNf1p\/HH6eQkj2YnwmtSyy+jQeE\/lRQWfOnAmjR49OzJOXpuS2v9eVH8vdfffdlZDZlx8VXfkRNzHNflL+Qdv45m2PSe0Ugrq\/XnkBt1HfVFZV7jgb8pi2oSu\/GL75tFGgK7+8hubLD4uu\/CGFn6IOMqmdQkN3ncTUgIsobyKrL4aUZU1QzlSMbagSERSBdVybuvjrkkdZclM\/uvLLnqWPuhSHHZPaKVRCWj\/QldVXJdSVXybCpDTtZZOCrvxiuivaPRQf6y5bbupPV\/44T62\/v9\/LzTP21BK0SffsjitllI18wYIFgEomnh8Sf6X0C+2kAAAD7ElEQVTiPB1fzqolYZ30K+tT+InzoCu\/WM4X7E3kF\/Mb+rLRkWZ\/7KmlIcTfMwKMACOQgoCXRzp41hgBRoARyIoAk1pW5LgeI8AIeIkAk5qX08JCMQKMQFYEmNSyIsf1GAFGwEsEmNS8nBYWihFgBLIiwKSWFbnTtJ6YQskk\/Y0v15LEaaNUPkUeIhaPkYRytSl01WZSC2gGTTJ7mJQ1gSDrIWJfSa2rq6vwA6yqx7pNsOeyeggwqenh5EUpE6IyKWsyOPm6kW5dJrVWaGxshPr6el3IuFxGBJjUMgJXVDU5Qy6FeGLWUzoNf+DAAaCbDCiPqiy2u2jRoijtDn5UoZCYDUIsK8qQFLIlPVKNpHbs2LHov56eniH3RsW2sU9KLEh3I0eOHBnVI7nFGxo4bqzf0dEB1dXVg24YqEJLmaBlGVWn9mWSVv2IsKdWlLXEt8ukVi7eqb2J2SRkYxANBxvC7Kf06y9fXYorS9mDVdec5Ky8clYRVfgpZ5cVy37nO9+JSKmzsxPq6uqifGx0dxH7XLZsGaxYsSL6Tqw3MDAQEffSpUsrmY\/F76uqqiIc+vr6IlLDD5I3Jk9Er0glbxypYaZWkTiT7lcyqaWqsrMCTGrOoI\/vWM77JZZSeQMy+Yhl0aMTs6tim7r3OuNIDuuSVyTKpyIQExJA2Tdt2hT1gaQmX55XZazYvXs3iOtkKi8pjtREElORv8l42FMr18iY1MrFW6s38eKyGD7JpCaGYBgq4Yey0YplMeRsamoa0nfc7qVMTCakpiJdFQmQ14meHH5mzJgBR48ejSW1uPcdRJkfffRRaGtrGzLWuDz5caSGFSlFtpjZAz1I8cOkpqXKTgoxqTmBXb9TMUzr7u6uvNWA3pfowajCzzhPLUkCuR0TUsvqqSHpit6fHH7m8dRUSLOnpq+HIZVkUvNstuI8gN7e3sh7kENKXGtat25dtHaE9cQ1K9WaGq19zZs3b8gLXTbX1ESC3Lx5c4Q0eUGyJ9nc3Bytt1GuM1ojiws\/TdbUaOOCcJLDZTFUlTEUf1Bw7U5eCqAQmdb18Pu4Zw85\/CzXyJjUysU7tTd591PcgSMDHTNmTBSa4eI7LmzjZ\/369dHfaYFcLotlxN1P1cHZpN1PbCPtnJq4+4nlxUX3JFITw08Mt3HDAMeCoTR+4hJSUuiN5XFc6MXG7X5i\/aQn2pI8NSRU+XEWORQVMSIZdu7cGZGavPHBpJaq9lYLMKlZhZMbc4FA1rNzaWtqtsbCpGYLSb12mNT0cOJSHiEQd+wlS2puJjWPJtWiKExqFsHkpspBQA6Ps6bmlu9+yut+NkbDdz9toGjWxv8DZbei79\/tEiAAAAAASUVORK5CYII=","height":186,"width":309}}
+%[output:0b49bf74]
+%   data: {"dataType":"image","outputData":{"dataUri":"data:image\/png;base64,iVBORw0KGgoAAAANSUhEUgAAANMAAAB\/CAYAAAB12fdMAAAAAXNSR0IArs4c6QAAGL5JREFUeF7tXQ2QVcWVbpQNkA1IACN\/gTEoklRtJP6BRFdSWaRSFhgpS2B2IwuIwAq4BpBfYSWC8re7gEaJkimsXUalRIVsagmShRBZWQGxXIsCpAKEvxEHCRjELSqz9TU5z\/N6uu\/t++7tN+\/NnFtlybzb3bf79Pn6\/PTp081qa2vrRo8erd577z0V91x\/\/fVq1apVql27dnFF5b1QoMlRoBnA9Pjjj6u5c+dGguT06dPKp1yTo6AMWCjwZwo0q6urqytnarz99tuqsrJSrVmzRvXt2zeToXz22Wdq+vTpuq2nnnpKtWrVSj399NNq4MCB6tprr83kGwsXLlToO0l6\/Pvw4cNq6NChmbRvNnLgwAH16KOPqkWLFkWOAWNfvny5GjNmTKwGknWf0ceRI0eq48ePq0GDBuVoH0UQ21wFIaCjUdAAc4l51JIJah4eUeHsFHv55ZfVihUrVFVVVRAw1dbWaiaaOHFiMDBhwsGktDi4GM4EuascMX6WfQadZ8yYkWhhbGgwQWMDfoYNG6a0ZKIObdiwQdOuc+fOVsahimRfPfnkk3ryqf7Zs2d1\/a1bt+a1YdYjKUJS5bHHHtNAxmRTm+Ykmn0cO3asmjZtml7dSTK1b99eM2X\/\/v3Vli1b1I033qiZByvtypUrdZO04h09ejSPgXk7sA1JMg0ZMkSXo4dLQNtEmsyIv81vQ9JRucWLF6upU6fmbFaMC1KB27E0VvSBGA7\/xu9om\/rkorON8W39Wr9+vWZmzgO7d++u9xvobPZv0qRJmmbEQ655RNu2b4OnMI\/02OrTHPH+de3aVX+X8x637bm0Qz1ql9oiGpp0v+OOO3RX2rRpo3kIj2t8NJdWNY9PGHVgwIABmoBQpUwmJubbtWuXBiERu1u3bmrOnDlq3rx5ujPoFCaMVnmsyCAgMUvUqshXViI8mAiPCSYCEZgWY3nppZc0WLkEuOGGG7zAZPbZVPN4++gLpxEfT9Q7UzKhXkVFhV6o+GpNiwUWBMwBMSXowBcAG52nTJmSWyBtCxBJGN5n9GvBggVq6dKlms4YG+YU7ZuLEa+3f\/9+p+odRZMoyUSgWLJkSd5Yib+I99BPkvKDBw\/WABg+fLjmW3wbYAePmrxHIKf31A5fkEktN8eH30HfWJuJHA933XWXGjduXG4V5KuyCRhiYoAGQMJ7mixOFAICrRYudYqLUtOmiGIM6iMkLZiPP+Zq7ZJMcWCyjQfM3bNnzzxgkVShhWTdunU5m8mm5tmkDGwqrgZFjZ33C\/W4mspXeNPWtC1ofHG1SXZzoXXNF\/1OC7JJE5KCNvuXL1rcm0xzfOTIEb1gmosW\/ubSibQuApMp1WmxIEmE\/8PWnDBhQk6QmOMjetYDkzmJ9HEMlE+IL5geeeQRrcaYDwDUvXv3vBXMBaYo\/TyKoWyTR\/3ICkwcsGibVi8bQPj4XGCi1RQrpCl5XaDg5Wx0PnToUG5FhmQ1VWbUIaaySRgACN5eeHNJw+CSiaQ81HT+cPWUMzW3szhNosDk0lpMVRt\/k3ZA6vKpU6e0NOI87AITAZ23+8ADD6jx48drM8Q2vhyYzH0ml71kes18wWRKJt4Zs804ycRXNGrHRzIRA0BiZg0mvrpeeeWV9VYv1yrsAlOU+plEMnE6RzlQSOqQnfH888\/nFgT+b9COezg5mEzJVG\/l\/PMPaSWTzQkUBSbYPdzTy+mQRjKZ48uB6fz589oBEbcRaxLCphbRakoqjq\/NRKti1KSbujzpxVy6kU3hWvnIlgOD06pFzO5rf9hc41yN4CpKITYTZ0xu1KNdbjOZ7+JsJhdTkQFPCw6cNSRdN23aVM++dTlwimUzmbYdtizg7qf+c8lEziPUIbqSlDLBhPo2m4rGy+nitJmSbNrOnDlTHTt2TH3wwQe688Q4fHVo3bq1\/p17VOK8eT5gSuLNM921Lo+ayzNmMiatwi5vo6m384WJf5urPZz5aNXHYoTJu+mmm7RahQd9AQPQmEJ487g2wu2p5557Tj377LPa04gykLx4YJuYfSa7Oak3z+apdO0ZRnnzbGDiThq8v\/3229W2bdvqqc+0P8n5tCBvXhbhRA3t63epFY3td9POS7L\/BfDiMR0xjY1GacYTpUm42iXe79evX7w3z6dzAiYfKmVThks6tBi1n8O\/6BsBkU0vy7MVc0\/KJxY1LwKi3MOJynPapNeNkQKx+0whBw1bBP\/JIxRoCArA+YL\/snoaDEwAEfafduzYkdVYpB2hQCIK9OnTRyGcKytANRiYyDODwXTp0iUREaSw0ovQsmXLNDMI\/ZJxxLYTzdWT286ptq+PThRUG\/eVPDBx9zNctAijmD17toJLPKujB9ShEEcn4gbbmN4jqmH16tVqxIgROo5PHn8KVL9zUj1UvTccmHhYDDa7MFGzZs3Sganbt2+PDd2PGwrcuLwdAVMcxaLfX7hwQZ04cUJ16tRJtWzZMl1jTax2cDDxk7TYHSYwAWRpT9iSy5FHcwuY0nGwgKlw+i3c+Du1cOOhcJIJXaNjDqNGjVJr167VwX08WraQ7gOM8+fPVz169FB79uzJSTgC08MPP6zuvvtu1bFjx0Kab7J1AKaTJ0+qq666SkcjyONPgaWbf6+Wbj4aFkzoDg\/ZwN++m4KuoUC9w4MYuurq6npgwjvo\/ffff78\/NaSk+vzzz3WYEUJ8WrRoIRRJQIEH151Uu45dCA+mBH2KLQr1jtRFxHfZwARvFNQ\/kUyx5MwrAIlfU1Oj6SY2UzLa3bPyfbXj8KfhwGQGo5rdcx3NiBqGeWIXZeElhEtXbKZkDGCWFpupcPq1+\/F\/6cpBXeNgfrhceTAk\/YYoWi5Zkg4F4LFJpiyzCiXtUzmXFzAVNnu7j5xVf\/Ovu8KCyZUXj37H+Rmc6YjLr+caooCpsMl31RIwJafnkdMXVO8n\/ltXvOz8x6rNr6aF2bSlfSZKTIFNWu7ShsftjTfeSL3fRCQQNS85M\/AaAqZk9Pvth2fU4J++m6v0y\/taZZ5vsV44kenNo+QgkydPzjQSQsCUjBnEZiqcXhOq96o175zMNfD6+N7qS7X7woOp8C4nqylgSkYvAVMyekGlW\/yrQ+rf\/+dErmK3di3V+n\/4jsL\/Q\/Bfgwe6igMiGZNQaVHz6tMNAPrF+6fU7Dc+rPeSAwkvg4PJ5srGh31OHCZliRCDSdqHci4vYLo0ewAQglbfOnjGOp0miELa7DnJBK8d2UVIQwVXOGXBpOyiWTKfgCkdNZsimACcLftPq7W7apzgAVUBoNfG9VZXd3CHWYXgvzwwUUArUjzRflOoq2RCDCYde5ZX7cYMJoAGz7JfH1H7a\/4YCRwCz9e\/2lI9M\/ybGkg+Twj+y4GJZ1lBIkS6fgRZMClXd1xuPZ9BhBSzSb5f7mUbA5gINP+y+bD68KPzsaChOQNgbr\/mq2rqnRXe4DHnOyiY8DEuhSCd6EaEEE6CEIMpd4Ak6X+5gIkA8\/SWI2rviXgpY9IAwPluj7Zq2sCr9StfyRNHyxD8J968OKqX6PtSARPAAgZ\/eedJ9W87LrmhXc6AKFKiDahqM39wtbr1G22DUz0omOLCiQoNI3JRJcRggs9ACX2gWGACWHC15Cs7T6rfHPhE\/f6TC9qDVshDgOn7jSvUj\/p0zlTSJO1PCP7L3RwYdUG075WISQYUYjBJvl\/uZbMAE0mV5b8+ojbtrS1YqnBbBv+GhIFaRipZVqpZlnMWgv+s3rwsHQ0imbJkgS\/aigITgWRfzR\/Vc785qo37NBLFBpaJ3+um7vxWey2lShEscVQPCqa4j2f9PsRgsu5jKbYH5v1TXZ164bdH1Y4PP1bNmzfXB93SPgQISBUY\/JW3dGpQNSzteOLqh+A\/LzVPIiDipib9e4Dk1Ln\/U6++W6PeP\/ZpJpLElCgATP\/r2qkff7972UqU9JS+1EIQMDVUrvEQg8mK0Fm2A5C89u5HavO+WlVXpzIFSec2zbVkgjT5Zqe\/VA\/c1lW1bH5Zo5YoWc1NCP5zJqGkTodwPoRaGbIitKsdsg\/w\/7cOfqLeOvgHdbj2s0wBgm9zlevbXVurv7+1s2phgCQLB0RoepVy+0HB5LpMmd9ybqaU4mefXKDjV6DYLtUKsSGcdBIJJK\/v+Ui9ubdWHT59IShAAJZ+PdrqXXwOniT9FjAloVb9skHBlHSfiQfG0lWOuPCJ34ZOAKWr4\/mQQgzGRl4A5eyFi6pq+3Ed55WFV4t\/xzTch97UUV1+WbOCQeLLIgImX0rZy4Xgvzw1j9\/pyY+tQ+pE3TjnAg0HnJmrPMRgDp46r\/7xlX0F7cC7AHJzxRXqb2\/pqP7i8tKyRQRMJQ4mdM880xSXhJJAYVPzzCPw\/P5Sepc2o+uU1w6pNe98cZoyisQw2Du1bq5tktHf7aI6fOVLwSVIuil315aMroVTFplwkesEVxplaWZkFptnJuY3h8qj0qEKcqAlzeh6\/OxF9U9vfqyzcpoPAea+b7dW3\/paC4W\/G+MjGV0Ln9UXX3xRJ0fFU5JgAjigJuImblcEBb+kmMCUJKMr7J9f\/u8pNe8\/828bhKR5ZZT\/WZbCp6F0akpG18LnApIJmbaQDDUImCija7du3bzSeZkOC9tt3gDM1q1btb1F7ePfOMGb1GYCkJCqiQdZjvvrrmrBD68tnKplXFNspnSTl5T\/fL4Wu8\/E7RyzQZtr3LyChrvGbTaTz8pgAsl1rt9nwI2ljIAp3UwGB5Otez7qWyHDSjKYQc+8m\/PQCZAuUVvAVAjXfVEnCf\/5filWMmVtpFHHfAfDM3ECSHtm3+o7tkZdTsCUbnp9+S\/JV\/KOYIwePVrf+VNVVZX5HbYuFTFOzaMbC0Qi5VNQwJSEzeuXDQqmdF1LXttnMFy9QybO264Jf5w5+UgapoaAKR3dffgv6Rcy22dK+uG4wfAbC3C+ZsND30n6iUZdXsCUbnrj+K+Q1ksWTFwqwU4qx9OchUyIbx0Bky+l7OWaDJhEKsUzioApnkZRJYKCKWnUeLqhRJ905B48kUp2SguY0nFgEDDV1tbWwYtXStmJSMUTV7ibYQRMJQgmOrYeKqe4a8iulYGreA\/1\/7r6yeBr0lGtkdYWMKWb2GCSCQn7cWftlClTrBKqmAlVRMXzYxIBkx+dki7maVotOW+eqHh+0ylg8qNTkwWTePH8GUTA5E8rW8kgah63mVyOiGKpeRxMuGtn+M0d01GsEdcWMKWb3KBgcnUNRyjoFsF03c+vbRsMLrd6\/BcHdUFxiUdTW8CUjhsbBEyhvHy2wYi95M8gAiZ\/WhVdzYsy1OKOoxcyLBNMXMVDQCsCW+VxU0DAlI47gkomOlZu27yNOyYRNSx+0pZnOjIHw13iYi\/FM4qAKZ5GUSWCgild1+y10eHq6mqdU+Lo0aO5e3KRQ88cTPU7J\/UV9GIv+c2EgMmPTlEaV2VlZZiEKvjogQMH8hge6buyuhwabS9YsEAtXbpUZy8ywcSjxE\/\/8\/fSUaoJ1BYwpZvkoJLJlZU1Lh+ez5BI1bOpeZSEcuJ\/IBH+GZ3nbuf0m32abdJlJAll4dMfPAll6KjxqCSUA+6pVGvrvq+pc2OXlupnQ2R\/KY5VJAllHIXc74uShBJSaMWKFbkcEOSUQJ67qFzjvsNyJaG80LaHgmTCs+7Bv1J9K77i22STLSdJKAuf+uBJKKlrsG1Gjhypjh8\/rn+KyzUe5zHxSUJ5sUMvnWBSnA\/+DCI2kz+tbCWD2kzpuuau7eMa\/93lFeLJSzgBAqaEBDOKBwVTqEgH15D5YObvaqGdD3IY0J9BBEz+tGoQyQQpUlFRkXdhWbouu2tzMI17sy53YbEkmfSjuIDJj04+izl8Alk89ZJQ2iIgQkaNL3zm52rspjo9Fknp5T+lAiZ\/WjWIZErXvWS1STJxMC27r5f6Ud9OyRpqoqUFTOkmPojNhIQqDXlsnYNJYvL8GUTA5E+rJiOZHvrJTxUcEHgkBbI\/gwiY\/GnVIGAKGZtnDojE7PUjFqitf7hKv5YDgf4MImDyp1XRwRQyNi9qMJ\/e9qi62OE6XUQCXP0ZRMDkT6uigyl0bJ5LMhGYZI8pGXMImJLRy8V\/ac7qmW3mpfoKHZvHP05q3tk7F6o\/fbmDuMUT8oaAKSHBjOJBvHmUnYi+lWVsXtRwaTBnfrhKF5M9pmTMIWBKRq+iS6Z03UtW2wTTtIEVatrAq5M10oRLC5jSTX5RJFO6LvrXNsEkbnF\/2qGkgCkZvZqUZBIwJWMOAVMyegmY0tGrUdcWMKWb3kat5skeUzLmEDAlo1fRJROh1fxwyKhx8uYJmJIxh4ApGb2KCibK94BcD1md7\/B1jcuGbXLGEDAlpxmvEVTNK+SkLTZ5Z8yYofvokl782Hrnzp1zyVq4N0\/2mJIzhoApOc2KBiZ8COA4dOiQVyYiM6kkQIMkLMje2qpVK91vV7wf3gmY0jGDgCkd\/YJLpjT3M\/FUyAQmSLvJkyermTNnKqREtq0MsJn+7uavqUX39EhHnSZWW5JQFj7hwZNQFt61SzVt+SNMh8bYsWNzUo9LpgdvaavG9mmbtgtNqr4koSx8uouShJLUsg0bNqhBgwbpvOOzZ8+2ShY+FB\/10JXRFZJp6HXN1NBLpzDk8aTAxYsX1ebNm1WvXr1U9+7dPWtJMVCgpqZG7dy5U7366qthEvcTs8NJMGTIELV69Wo1a9YstX79erV9+\/Y8W4hPSZKMRjyjK27FmDp1qtp0xRD15d0\/V80\/3iczLRQoKgX69OmjFi9erLp27ZrJd\/OyEyEXxNy5c1VtbW0OTAAZ\/Y7bK0wgRV3RCVXOldEV7QBQ+E8eoUBDUAAgygpI6H\/eeSbyyI0aNUqtXbtWjR8\/Xk2YMEHvO5m5xm0bvKQaLlq0SIMS4OOucW4zNQTx5JtCgZAUyAMTPmSCJE2u8ZAdl7aFAqVGgXpgKrUOSn+EAuVCAQFTucyU9LPkKZAHJu4ap57DDuJRDVmNiKuTokq6qcrnxBWyZaYaENs0nkujonPia9tL5MDEXePkbKDfUDVLQPHICLTN77otdCCNtR7fw3NtQ9iiTxorPbIYFwV1I69+kOxExUz1hckHY6xatUrH8U2fPl0NHz68KNHqWUxGsdqwbXTT7fUUsoW++GyaF6vPpf4d0HT58uXq3nvvVVOmTNFe6qxOSeSpebYVLsmmrC8h+XdQB2Dq169fUa6y8e1jKZQzVRG+CNGen6ma88j8UhhDqfYhxJEjrytliCBZHRIUMPmxmA+YzJZsgPP7WtMqFRRMxSSlqHl+1PZV83hrZr54vy81vVLBwVQsb544IPyZN84BgTmbP3++GjFihD7mgvJRsZT+X27cJYOCyebNAzlth\/6yIDN3jWfpUcmib6XUhhnJT15VgAbP0KFDFXeNi83kN3tBwVRMb57fcKWUUKC8KFAv0BVnmaqqqrTKQCseNm7NQNfyGqb0VigQngL1wol4khR8vrFHJ\/ju0WS5RcBVN59ohRC79UlZi\/c5a54glT9UtE3SsRZavsnH5jUEmJJmgiolMIXaXIcWRAdS+YZ0oYzdEPWaDJhsRjoOQVZWVmq6k4TgkpmM+d27d+dSmtGqzM9puVZq0zsKR0vPnj0VJa5xOQt426iD\/T1sbPfu3VtHjSALFP+mrc849IY6Z86cUdu2bdNhM3j4eHk2qbjx2Pa8EI3RunVr3XZUqreKigrtKIlaFARMDQH\/Ar5pYwQ6Acwlk7nhyY\/ZczWPu59xUnjkyJFqyZIl9cJSuCcUcWAIX4E92r59e2fWJt4fSqf2xBNPKBy4xANvHm8LCwKFZtFhTJSbNGmSBhMAC3uXe68InNQeT03gGo+NhgAmX1zQnmlbc7oJmApg3lKrEjWJUWqebY9n8ODB9cKfbPaU+U2+ATtgwAArmFz9NDdvo1KoUZ8JTBSmZYaK0d9z5sxR8+bNywvn8hmPufCYeRSJBwRMpYaGDPrDI4W5SsIBY9u0JvWPmILABK8nf0xHgm0fg9pwgcm192GCjIOJ1DneH\/SFwEQ2jrmZa4IpbjwuNY\/2vQRMRg6IDHi2LJrgqzRUHMpiazJclGSKM8RDSCb6JgcT7Dke8WBKJqoTJ5mSjseUTK6YQC6ZojZKxWYqC+gobS\/wzLI8axIHDAcTwABHASWTcdlMVG7YsGH1ot4LsZm4nUZxdlDDXnjhhdwxFReYeJ9NyeRrM7nG47KZKHqF95uzhUkD2Fm2iBcBU5mACd3k4UtczaPfoRqNGTMm52lDGfy9ceNGbfRDguGSAps3z7VXZPPmAZxRNo+tDjkMbJIJzgzyDvI+ky3EJQ6NFU4J1NmzZ0\/u0GdcFikbmFauXKk5AM4cvkdkk0ZwmgBI586d04sCvJp8gRMwlRGYpKv5FHBJEhed4mymtPQVMKWloNQvGgXMPBFJow3MCAikZLad+i1kQBIBUQjVpI5QoBFT4P8BVYnXFEAZNL4AAAAASUVORK5CYII=","height":0,"width":0}}
 %---
-%[output:2330891c]
-%   data: {"dataType":"textualVariable","outputData":{"name":"heat_capacity","value":"  13.199999999999999"}}
+%[output:178ec249]
+%   data: {"dataType":"textualVariable","outputData":{"name":"heat_capacity","value":"13.2000"}}
 %---
-%[output:55c0aace]
-%   data: {"dataType":"textualVariable","outputData":{"name":"Rth_switch_HA","value":"   0.007500000000000"}}
+%[output:7b55c0ed]
+%   data: {"dataType":"textualVariable","outputData":{"name":"Rth_switch_HA","value":"0.0075"}}
 %---
-%[output:6d4591c7]
-%   data: {"dataType":"textualVariable","outputData":{"name":"Rth_mosfet_HA","value":"   0.007500000000000"}}
+%[output:50dd316e]
+%   data: {"dataType":"textualVariable","outputData":{"name":"Rth_mosfet_HA","value":"0.0075"}}
 %---
