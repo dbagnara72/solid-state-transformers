@@ -1,6 +1,6 @@
-clear all
-close all
-clc
+% clear all
+% close all
+% clc
 
 
 %% 1. Input Data and Design Parameters
@@ -12,7 +12,7 @@ f = 4e3;             % Operating Frequency [Hz]
 n12 = I2/I1;             % Transformation Ratio V1/V2 (1:1)
 Sn = V1 * I1;        % Apparent Power [VA]
 
-% Design Parameters (Optimized for Nanocrystalline at 12 kHz)
+% Design Parameters (Optimized for Nanocrystalline at 4 kHz)
 Bmax = 0.8;          % Max Magnetic Flux Density [T]
 J = 3.0;             % Current Density [A/mm^2] 
 rho_Cu = 1.72e-8;    % Copper Resistivity [Ohm*m]
@@ -51,6 +51,7 @@ Lband2 = A_Cu2 / 0.5; % Copper band length [mm]
 % Core Depth/Width using AM-NC-320C AMMET Nanocrystalline cut cores
 L_core_height = 22; % Core width in [cm]
 L_core_width = 5; % Core width in [cm]
+L_core_window = 6; % Core window in [cm]
 L_core_length = 72; % Core depth in [cm]
 L_core_depth = S_Fe/L_core_width; % Core depth in [cm]
 
@@ -63,6 +64,7 @@ fprintf('Primary Copper Band Length: %.2f cm\n', Lband1/10);
 fprintf('Secondary Copper Band Length (L_b2): %.2f cm\n', Lband2/10);
 fprintf('Core Height (AM-NC-320C AMMET): %.2f cm\n', L_core_height);
 fprintf('Core Width (AM-NC-320C AMMET): %.2f cm\n', L_core_width);
+fprintf('Core Window (AM-NC-320C AMMET): %.2f cm\n', L_core_window);
 fprintf('Core Length (AM-NC-320C AMMET): %.2f cm\n', L_core_length);
 fprintf('Core Dept (AM-NC-320C AMMET): %.2f cm\n', L_core_depth);
 fprintf('Specific Core Loss (AM-NC-320C AMMET): %.2f W/kg\n', P_spec);
@@ -108,8 +110,8 @@ disp('----------------------------------------------------');
 %% 6. Leakage Inductance (Ld) Estimation
 % Estimated Geometric Parameters (Highly dependent on physical core selection)
 L_avv = Lband1 * 1e-3;    % Winding Length along the core leg [m]
-h1 = 50 * 1e-3;           % Radial Thickness of Primary Winding [m]
-h2 = 50 * 1e-3;           % Radial Thickness of Secondary Winding [m]
+h1 = 30 * 1e-3;           % Radial Thickness of Primary Winding [m]
+h2 = 30 * 1e-3;           % Radial Thickness of Secondary Winding [m]
 d = h1 + h2;              % Radial distance between P and S (Insulation) [m]
 
 % Ld calculation (referred to Primary) using simplified concentric model
@@ -125,6 +127,14 @@ Xd = 2 * pi * f * L_d_eff;
 % Estimate Short Circuit Voltage (Vcc%)
 Vcc_perc = (Xd * I1 / V1) * 100;
 
+K = 0.5;
+Lband1_m = Lband1/1000; % [m]
+L_core_depth_m = L_core_depth/100; % [m]
+L_core_width_m = L_core_width/100; % [m]
+
+Lsigma = mu0 * n1^2 * K * Lband1_m * L_core_depth_m / L_core_width_m;
+
+
 % Output Results Leakage Inductance (Corrected Display)
 disp('--- LEAKAGE INDUCTANCE AND REACTANCE ESTIMATION ---');
 fprintf('Calculated Leakage Inductance (Ld_calc): %.6f H (%.2f uH)\n', L_d_calc, L_d_calc * 1e6);
@@ -132,3 +142,4 @@ fprintf('Effective Leakage Inductance (Ld_eff): %.6f H (%.2f uH)\n', L_d_eff, L_
 fprintf('Leakage Reactance (Xd): %.3f Ohm\n', Xd);
 fprintf('Estimated Short Circuit Voltage (Vcc): %.2f %%\n', Vcc_perc);
 disp('----------------------------------------------------');
+
