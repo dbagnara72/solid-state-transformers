@@ -125,6 +125,13 @@ Xd = 2 * pi * f * L_d_eff;
 % Estimate Short Circuit Voltage (Vcc%)
 Vcc_perc = (Xd * I1 / V1) * 100;
 
+K = 0.5;
+Lband1_m = Lband1/1000; % [m]
+L_core_depth_m = L_core_depth/100; % [m]
+L_core_width_m = L_core_width/100; % [m]
+
+Lsigma = mu0 * n1^2 * K * Lband1_m * L_core_depth_m / L_core_width_m;
+
 % Output Results Leakage Inductance (Corrected Display)
 disp('--- LEAKAGE INDUCTANCE AND REACTANCE ESTIMATION ---');
 fprintf('Calculated Leakage Inductance (Ld_calc): %.6f H (%.2f uH)\n', L_d_calc, L_d_calc * 1e6);

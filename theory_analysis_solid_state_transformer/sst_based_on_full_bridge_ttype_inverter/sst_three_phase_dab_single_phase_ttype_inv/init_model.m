@@ -99,7 +99,8 @@ RCFi_dc2_internal = 1e-3;
 %[text] #### Tank LC and HF-Transformer parameters
 three_phaseDAB_TRsizing; %[output:87bfeb36]
 
-Ls = Lsigma; % from TR design script
+Ls = L_d_eff; % from TR design script
+% Ls = Lsigma; % from TR design script
 % Ls = (Vdab1_dc_nom^2/fPWM_DAB/Pnom/3);
 
 m1 = n1;

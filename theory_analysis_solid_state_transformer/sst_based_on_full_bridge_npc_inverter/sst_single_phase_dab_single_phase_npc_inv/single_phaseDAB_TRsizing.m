@@ -1,7 +1,3 @@
-clear all
-close all
-clc
-
 
 %% 1. Input Data and Design Parameters
 %--------------------------------------------------------------------------
@@ -53,6 +49,7 @@ L_core_height = 29; % Core width in [cm]
 L_core_width = 6; % Core width in [cm]
 L_core_length = 95; % Core depth in [cm]
 L_core_depth = S_Fe/L_core_width; % Core depth in [cm]
+L_core_depth_sel = 10; % Core depth in [cm]
 
 disp('----------------------------------------------------');
 fprintf('Core Section Area (S_Fe): %.4f cm^2\n', S_Fe);
@@ -65,9 +62,11 @@ fprintf('Core Height (AM-NC-412 AMMET): %.2f cm\n', L_core_height);
 fprintf('Core Width (AM-NC-412 AMMET): %.2f cm\n', L_core_width);
 fprintf('Core Length (AM-NC-412 AMMET): %.2f cm\n', L_core_length);
 fprintf('Core Dept (AM-NC-412 AMMET): %.2f cm\n', L_core_depth);
+fprintf('Core Dept selected (AM-NC-412 AMMET): %.2f cm\n', L_core_depth_sel);
 fprintf('Specific Core Loss (AM-NC-412 AMMET): %.2f W/kg\n', P_spec);
 disp('----------------------------------------------------');
 
+L_core_depth = L_core_depth_sel;
 
 %% 3. Core Loss (P_Fe) Estimation (AM-NC-412 AMMET Nanocrystalline cut cores)
 % Estimation of Core Volume and Mass
