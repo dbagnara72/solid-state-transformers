@@ -3,7 +3,7 @@
 This repo contains a collection of simscape models concerning the Solid State Transformers (SSTs). Basically the repo is a on working study on different SSTs architectures. 
 
 **How to use this repository**:
-- Add to matlab **path/with-subfolders** the repository **library**. The library repo contains all fundamentals simscape (ssc) models compiled with "ssc_bultd".
+- Add to matlab **path/with-subfolders** the repository **library**. The library repo contains all fundamentals simscape (ssc) models compiled by "ssc_build".
     - The folder ./library/user_defined_functions/ccaller contains a list of c-coded functions used inside the simulink models by ccallers.
     - The folder ./library/foundation contains all simscape language based model used in the simulink models.
     - The folder ./library/documentations contains documentation for most of the applications available on **modelization-and-control**, **solid_state_transformers**, and others repositories.
